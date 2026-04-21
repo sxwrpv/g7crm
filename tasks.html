@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Execution Queue — G7 Systems</title>
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="main">
+  <header class="page-header">
+    <div>
+      <h2>Execution Queue</h2>
+      <div class="header-sub" id="taskSubtitle">Loading…</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <span id="plusIcon"></span> Add Task
+      </button>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="stats-grid" id="taskStats" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px;">
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="toolbar" style="margin:0;flex:1;">
+          <div class="search-wrap">
+            <span id="searchIcon"></span>
+            <input type="text" id="searchInput" placeholder="Search tasks…" oninput="filterTasks()" />
+          </div>
+          <select class="filter-sel" id="statusFilter" onchange="filterTasks()">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+          <select class="filter-sel" id="custFilter" onchange="filterTasks()">
+            <option value="">All Accounts</option>
+          </select>
+          <select class="filter-sel" id="typeFilter" onchange="filterTasks()">
+            <option value="">All Task Types</option>
+            <option value="sales">Sales</option>
+            <option value="follow-up">Follow-up</option>
+            <option value="onboarding">Onboarding</option>
+            <option value="delivery">Delivery</option>
+            <option value="support">Support</option>
+            <option value="general">General</option>
+          </select>
+          <select class="filter-sel" id="dueFilter" onchange="filterTasks()">
+            <option value="">Any Due Date</option>
+            <option value="overdue">Overdue</option>
+            <option value="today">Due Today</option>
+            <option value="week">Due This Week</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Account</th>
+              <th>Type</th>
+              <th>Priority</th>
+              <th>Due</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="taskTable">
+            <tr><td colspan="7"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="taskModal">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <h3 id="taskModalTitle">Add Task</h3>
+      <button class="modal-close" onclick="closeModal('taskModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="taskId" />
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label req">Task Title</label>
+          <input type="text" id="tTitle" class="form-input" placeholder="Send onboarding checklist" />
+        </div>
+        <div class="form-group">
+          <label class="form-label req">Account Name</label>
+          <input type="text" id="tCustomerName" class="form-input" placeholder="Type account name" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Task Type</label>
+          <select id="tType" class="form-select">
+            <option value="sales">Sales</option>
+            <option value="follow-up">Follow-up</option>
+            <option value="onboarding">Onboarding</option>
+            <option value="delivery">Delivery</option>
+            <option value="support">Support</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select id="tPriority" class="form-select">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Due Date</label>
+          <input type="date" id="tDue" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select id="tStatus" class="form-select">
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Assigned To</label>
+        <input type="text" id="tAssignedTo" class="form-input" placeholder="Arsen / Ops / Sales" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea id="tDesc" class="form-textarea" placeholder="Additional details…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('taskModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="delModal">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-header">
+      <h3>Delete Task</h3>
+      <button class="modal-close" onclick="closeModal('delModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg">Delete <strong id="delTaskName"></strong>? This cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('delModal')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/tasks.js"></script>
+</body>
+</html>

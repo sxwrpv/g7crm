@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Profile — G7 Systems</title>
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="main">
+  <header class="page-header">
+    <div>
+      <h2 id="pageTitle">Account Profile</h2>
+      <div class="header-sub" id="pageSub"></div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-secondary" onclick="history.back()" id="backBtn"></button>
+      <button class="btn btn-primary" onclick="openEditModal()" id="editBtn"></button>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="profile-header" id="profileHeader">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <div class="mini-grid" id="summaryCards">
+      <div class="mini-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="mini-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="mini-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="mini-card"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('interactions',this)">Interactions</button>
+      <button class="tab-btn" onclick="switchTab('deals',this)">Offers</button>
+      <button class="tab-btn" onclick="switchTab('tasks',this)">Tasks</button>
+      <button class="tab-btn" onclick="switchTab('leads',this)">Lead Intake</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-interactions">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--text-secondary);" id="intCount"></span>
+        <button class="btn btn-primary btn-sm" onclick="openIntModal()"><span id="intPlusIcon"></span> Log Interaction</button>
+      </div>
+      <div id="intList"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <div class="tab-panel" id="tab-deals">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--text-secondary);" id="dealCount"></span>
+        <button class="btn btn-primary btn-sm" onclick="openDealModal()"><span id="dealPlusIcon"></span> Add Offer</button>
+      </div>
+      <div id="dealList"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <div class="tab-panel" id="tab-tasks">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--text-secondary);" id="taskCount"></span>
+        <button class="btn btn-primary btn-sm" onclick="openTaskModal()"><span id="taskPlusIcon"></span> Add Task</button>
+      </div>
+      <div id="taskList"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <div class="tab-panel" id="tab-leads">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <span style="font-size:13px;color:var(--text-secondary);" id="leadCount"></span>
+        <span class="td-muted">n8n webhook writes into lead_submissions</span>
+      </div>
+      <div id="leadList"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="editModal">
+  <div class="modal" style="max-width:760px;">
+    <div class="modal-header">
+      <h3>Edit Account</h3>
+      <button class="modal-close" onclick="closeModal('editModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label req">Primary Contact</label><input type="text" id="eName" class="form-input" /></div>
+        <div class="form-group"><label class="form-label req">Business Name</label><input type="text" id="eCompany" class="form-input" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label req">Email</label><input type="email" id="eEmail" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Phone</label><input type="text" id="ePhone" class="form-input" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Website</label><input type="url" id="eWebsite" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Niche</label><input type="text" id="eNiche" class="form-input" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Record Type</label><select id="eRecordType" class="form-select"><option value="lead">Lead</option><option value="prospect">Prospect</option><option value="client">Client</option><option value="former-client">Former Client</option><option value="partner">Partner</option></select></div>
+        <div class="form-group"><label class="form-label">Account Stage</label><select id="eAccountStage" class="form-select"><option value="new">New</option><option value="in-progress">In Progress</option><option value="closed">Closed</option><option value="recurring">Recurring</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Lifecycle Status</label><select id="eStatus" class="form-select"><option value="lead">Lead</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Onboarding Status</label><select id="eOnboardingStatus" class="form-select"><option value="not-started">Not Started</option><option value="awaiting-access">Awaiting Access</option><option value="setup-in-progress">Setup In Progress</option><option value="live">Live</option><option value="paused">Paused</option></select></div>
+        <div class="form-group"><label class="form-label">Delivery Status</label><select id="eDeliveryStatus" class="form-select"><option value="not-started">Not Started</option><option value="monitoring">Monitoring</option><option value="stable">Stable</option><option value="needs-attention">Needs Attention</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Preferred Alert Channel</label><select id="ePreferredAlertChannel" class="form-select"><option value="telegram">Telegram</option><option value="email">Email</option><option value="whatsapp">WhatsApp</option><option value="sms">SMS</option><option value="none">None</option></select></div>
+        <div class="form-group"><label class="form-label">Alert Destination</label><input type="text" id="eAlertDestination" class="form-input" /></div>
+      </div>
+      <div class="form-group"><label class="form-label">Next Action</label><input type="text" id="eNextAction" class="form-input" /></div>
+      <div class="form-group"><label class="form-label">Address</label><input type="text" id="eAddress" class="form-input" /></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea id="eNotes" class="form-textarea"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="intModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Log Interaction</h3>
+      <button class="modal-close" onclick="closeModal('intModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label req">Type</label><select id="iType" class="form-select"><option value="call">Call</option><option value="email">Email</option><option value="meeting">Meeting</option><option value="note">Note</option></select></div>
+        <div class="form-group"><label class="form-label req">Direction</label><select id="iDirection" class="form-select"><option value="outbound">Outbound</option><option value="inbound">Inbound</option><option value="internal">Internal</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label req">Date</label><input type="datetime-local" id="iDate" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Outcome</label><input type="text" id="iOutcome" class="form-input" placeholder="No answer / booked call / needs follow-up" /></div>
+      </div>
+      <div class="form-group"><label class="form-label req">Subject</label><input type="text" id="iSubject" class="form-input" placeholder="Brief subject line" /></div>
+      <div class="form-group"><label class="form-label">Next Step</label><input type="text" id="iNextStep" class="form-input" placeholder="Send proposal / follow up Friday" /></div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea id="iNotes" class="form-textarea" placeholder="What was discussed…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('intModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveInteraction()">Log It</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="dealModal">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <h3 id="dealModalTitle">Add Offer</h3>
+      <button class="modal-close" onclick="closeModal('dealModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="dealEditId" />
+      <div class="form-row">
+        <div class="form-group"><label class="form-label req">Offer Title</label><input type="text" id="dTitle" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Offer Type</label><input type="text" id="dOfferType" class="form-input" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Value (€)</label><input type="number" id="dValue" class="form-input" min="0" step="0.01" /></div>
+        <div class="form-group"><label class="form-label req">Stage</label><select id="dStage" class="form-select"><option value="prospect">Prospect</option><option value="proposal">Proposal</option><option value="negotiation">Negotiation</option><option value="closed-won">Closed Won</option><option value="closed-lost">Closed Lost</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Setup Fee (€)</label><input type="number" id="dSetupFee" class="form-input" min="0" step="0.01" /></div>
+        <div class="form-group"><label class="form-label">Monthly Revenue (€)</label><input type="number" id="dMonthlyRevenue" class="form-input" min="0" step="0.01" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Expected Close Date</label><input type="date" id="dExpectedCloseDate" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Close Reason</label><input type="text" id="dCloseReason" class="form-input" /></div>
+      </div>
+      <div class="form-group"><label class="form-label">Scope</label><textarea id="dScope" class="form-textarea"></textarea></div>
+      <div class="form-group"><label class="form-label">Description</label><textarea id="dDesc" class="form-textarea"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('dealModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDeal()">Save Offer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="taskModal">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <h3>Add Task</h3>
+      <button class="modal-close" onclick="closeModal('taskModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label req">Task Title</label><input type="text" id="tTitle" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Task Type</label><select id="tType" class="form-select"><option value="sales">Sales</option><option value="follow-up">Follow-up</option><option value="onboarding">Onboarding</option><option value="delivery">Delivery</option><option value="support">Support</option><option value="general">General</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Due Date</label><input type="date" id="tDue" class="form-input" /></div>
+        <div class="form-group"><label class="form-label">Status</label><select id="tStatus" class="form-select"><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="done">Done</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Priority</label><select id="tPriority" class="form-select"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select></div>
+        <div class="form-group"><label class="form-label">Assigned To</label><input type="text" id="tAssignedTo" class="form-input" /></div>
+      </div>
+      <div class="form-group"><label class="form-label">Description</label><textarea id="tDesc" class="form-textarea"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('taskModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

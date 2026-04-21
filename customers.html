@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accounts — G7 Systems</title>
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="main">
+  <header class="page-header">
+    <div>
+      <h2>Accounts</h2>
+      <div class="header-sub" id="custCount">Loading…</div>
+    </div>
+    <div class="page-actions">
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <span id="plusIcon"></span> Add Account
+      </button>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="card">
+      <div class="card-header">
+        <div class="toolbar" style="margin:0;flex:1;">
+          <div class="search-wrap">
+            <span id="searchIcon"></span>
+            <input type="text" id="searchInput" placeholder="Search by business, contact, email…" oninput="filterTable()" />
+          </div>
+          <select class="filter-sel" id="recordTypeFilter" onchange="filterTable()">
+            <option value="">All Record Types</option>
+          </select>
+          <select class="filter-sel" id="accountStageFilter" onchange="filterTable()">
+            <option value="">All Account Stages</option>
+            <option value="new">New</option>
+            <option value="in-progress">In Progress</option>
+            <option value="closed">Closed</option>
+            <option value="recurring">Recurring</option>
+          </select>
+          <select class="filter-sel" id="statusFilter" onchange="filterTable()">
+            <option value="">All Lifecycle Statuses</option>
+            <option value="lead">Lead</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <select class="filter-sel" id="onboardingFilter" onchange="filterTable()">
+            <option value="">All Onboarding States</option>
+            <option value="not-started">Not Started</option>
+            <option value="awaiting-access">Awaiting Access</option>
+            <option value="setup-in-progress">Setup In Progress</option>
+            <option value="live">Live</option>
+            <option value="paused">Paused</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Business</th>
+              <th>Contact</th>
+              <th>Type</th>
+              <th>Stage</th>
+              <th>Niche</th>
+              <th>Onboarding</th>
+              <th>Next Action</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="custTable">
+            <tr><td colspan="8"><div class="loading"><div class="spinner"></div> Loading…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="custModal">
+  <div class="modal" style="max-width:760px;">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Account</h3>
+      <button class="modal-close" onclick="closeModal('custModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="custId" />
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label req">Primary Contact</label>
+          <input type="text" id="fName" class="form-input" placeholder="Arsen Murphy" />
+        </div>
+        <div class="form-group">
+          <label class="form-label req">Business Name</label>
+          <input type="text" id="fCompany" class="form-input" placeholder="Arsen Plumbing Dublin" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label req">Email</label>
+          <input type="email" id="fEmail" class="form-input" placeholder="owner@business.ie" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="text" id="fPhone" class="form-input" placeholder="+353 87 123 4567" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Website</label>
+          <input type="url" id="fWebsite" class="form-input" placeholder="https://example.ie" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Service Area</label>
+          <input type="text" id="fServiceArea" class="form-input" placeholder="Dublin 1, Dublin 2, Dundrum" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Record Type</label>
+          <select id="fRecordType" class="form-select">
+            <option value="lead">Lead</option>
+            <option value="prospect">Prospect</option>
+            <option value="client">Client</option>
+            <option value="former-client">Former Client</option>
+            <option value="partner">Partner</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account Stage</label>
+          <select id="fAccountStage" class="form-select">
+            <option value="new">New</option>
+            <option value="in-progress">In Progress</option>
+            <option value="closed">Closed</option>
+            <option value="recurring">Recurring</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Lifecycle Status</label>
+          <select id="fStatus" class="form-select">
+            <option value="lead">Lead</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Niche</label>
+          <input type="text" id="fNiche" class="form-input" placeholder="Plumber" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Source Channel</label>
+          <select id="fSourceChannel" class="form-select">
+            <option value="manual-import">Manual Import</option>
+            <option value="google-maps">Google Maps</option>
+            <option value="website-form">Website Form</option>
+            <option value="referral">Referral</option>
+            <option value="instagram">Instagram</option>
+            <option value="facebook">Facebook</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Onboarding Status</label>
+          <select id="fOnboardingStatus" class="form-select">
+            <option value="not-started">Not Started</option>
+            <option value="awaiting-access">Awaiting Access</option>
+            <option value="setup-in-progress">Setup In Progress</option>
+            <option value="live">Live</option>
+            <option value="paused">Paused</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred Alert Channel</label>
+          <select id="fPreferredAlertChannel" class="form-select">
+            <option value="telegram">Telegram</option>
+            <option value="email">Email</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="sms">SMS</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Alert Destination</label>
+          <input type="text" id="fAlertDestination" class="form-input" placeholder="@sxwrpv1 or ops@business.ie" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input type="text" id="fWhatsapp" class="form-input" placeholder="+353 87 123 4567" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Address</label>
+        <input type="text" id="fAddress" class="form-input" placeholder="123 Main St, Dublin" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Next Action</label>
+        <input type="text" id="fNextAction" class="form-input" placeholder="Send onboarding checklist / book discovery call / verify live form" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea id="fNotes" class="form-textarea" placeholder="Commercial context, objections, technical notes…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('custModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCustomer()">Save Account</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="delModal">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-header">
+      <h3>Delete Account</h3>
+      <button class="modal-close" onclick="closeModal('delModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg">Are you sure you want to delete <strong id="delName"></strong>? This will also remove dependent interactions, deals, tasks, systems, and linked records.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('delModal')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/customers.js"></script>
+</body>
+</html>

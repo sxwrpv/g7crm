@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operator Dashboard — G7 Systems</title>
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="main">
+  <header class="page-header page-header-hero">
+    <div>
+      <div class="eyebrow">Operator Overview</div>
+      <h2>Agency Command Center</h2>
+      <div class="header-sub" id="headerDate"></div>
+    </div>
+    <div class="page-actions hero-actions">
+      <a href="customers.html" class="btn btn-secondary">Review Accounts</a>
+      <a href="tasks.html" class="btn btn-primary">Open Delivery Ops</a>
+    </div>
+  </header>
+
+  <div class="page-content page-content-hero">
+    <section class="hero-panel hero-panel-simple">
+      <div class="hero-copy">
+        <div class="eyebrow">Overview</div>
+        <h3>Leads, pipeline, tasks.</h3>
+        <p>Use this to track work and what needs attention.</p>
+      </div>
+    </section>
+
+    <div class="stats-grid stats-grid-premium" id="statsGrid">
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+      <div class="stat-card"><div class="loading"><div class="spinner"></div></div></div>
+    </div>
+
+    <div class="dash-grid dash-grid-wide">
+      <div class="card card-spotlight">
+        <div class="card-header">
+          <span class="card-title">Recent Accounts</span>
+          <a href="customers.html" class="btn btn-secondary btn-sm">View Accounts</a>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Account</th><th>Type</th><th>Onboarding</th></tr></thead>
+            <tbody id="recentCust">
+              <tr><td colspan="3"><div class="loading"><div class="spinner"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card card-spotlight">
+        <div class="card-header">
+          <span class="card-title">Pipeline by Stage</span>
+          <a href="deals.html" class="btn btn-secondary btn-sm">View Pipeline</a>
+        </div>
+        <div class="card-body" id="pipelineSummary">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recent Lead Intake</span>
+          <span class="td-muted">n8n + Supabase landing zone</span>
+        </div>
+        <div class="card-body">
+          <div class="activity-list" id="recentLeads">
+            <div class="loading"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Execution Queue</span>
+          <a href="tasks.html" class="btn btn-secondary btn-sm">View Tasks</a>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Task</th><th>Priority</th><th>Due</th></tr></thead>
+            <tbody id="upcomingTasks">
+              <tr><td colspan="3"><div class="loading"><div class="spinner"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toasts"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

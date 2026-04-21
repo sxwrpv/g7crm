@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pipeline — G7 Systems</title>
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar"></aside>
+
+<main class="main">
+  <header class="page-header">
+    <div>
+      <h2>Pipeline</h2>
+      <div class="header-sub" id="dealsSubtitle">Loading…</div>
+    </div>
+    <div class="page-actions">
+      <select class="filter-sel" id="stageFilter" onchange="renderBoard()">
+        <option value="">All Stages</option>
+        <option value="prospect">Prospect</option>
+        <option value="proposal">Proposal</option>
+        <option value="negotiation">Negotiation</option>
+        <option value="closed-won">Closed Won</option>
+        <option value="closed-lost">Closed Lost</option>
+      </select>
+      <button class="btn btn-primary" onclick="openAddDeal()">
+        <span id="plusIcon"></span> Add Offer
+      </button>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="kanban-total-bar">
+      <span class="label">Open Pipeline Value</span>
+      <span class="value" id="pipelineTotal">—</span>
+    </div>
+    <div class="kanban-total-bar">
+      <span class="label">Tracked Monthly Revenue</span>
+      <span class="value" id="pipelineMrr">—</span>
+    </div>
+
+    <div class="kanban-wrap" id="kanbanBoard">
+      <div class="loading"><div class="spinner"></div> Loading…</div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="dealModal">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <h3 id="dealModalTitle">Add Offer</h3>
+      <button class="modal-close" onclick="closeModal('dealModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="dealId" />
+      <div class="form-group">
+        <label class="form-label req">Account</label>
+        <select id="dCustomer" class="form-select" onchange="toggleCustomerInput()">
+          <option value="">— Select an account —</option>
+          <option value="__new__">— Enter account name —</option>
+        </select>
+        <input type="text" id="dCustomerName" class="form-input" placeholder="Type account name" style="display:none;margin-top:6px;" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label req">Offer Title</label>
+          <input type="text" id="dTitle" class="form-input" placeholder="Missed lead recovery + Telegram alerts" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Offer Type</label>
+          <input type="text" id="dOfferType" class="form-input" placeholder="Lead follow-up automation" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Value (€)</label>
+          <input type="number" id="dValue" class="form-input" placeholder="0.00" min="0" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label class="form-label req">Stage</label>
+          <select id="dStage" class="form-select">
+            <option value="prospect">Prospect</option>
+            <option value="proposal">Proposal</option>
+            <option value="negotiation">Negotiation</option>
+            <option value="closed-won">Closed Won</option>
+            <option value="closed-lost">Closed Lost</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Setup Fee (€)</label>
+          <input type="number" id="dSetupFee" class="form-input" placeholder="0.00" min="0" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Monthly Revenue (€)</label>
+          <input type="number" id="dMonthlyRevenue" class="form-input" placeholder="0.00" min="0" step="0.01" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Expected Close Date</label>
+          <input type="date" id="dExpectedCloseDate" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Close Reason</label>
+          <input type="text" id="dCloseReason" class="form-input" placeholder="Won because speed mattered / lost on price" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Scope</label>
+        <textarea id="dScope" class="form-textarea" placeholder="Scope, deliverables, rollout details…"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea id="dDesc" class="form-textarea" placeholder="Commercial notes…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('dealModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDeal()">Save Offer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="delModal">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-header">
+      <h3>Delete Offer</h3>
+      <button class="modal-close" onclick="closeModal('delModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg">Delete <strong id="delDealName"></strong>? This cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('delModal')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/deals.js"></script>
+</body>
+</html>
