@@ -99,7 +99,8 @@ function sourceLabel(value) {
 }
 
 const NAV_ITEMS = [
-  { id: 'nav-dash',  icon: 'dashboard', label: 'Overview' },
+  { id: 'nav-home',  icon: 'building',  label: 'Welcome' },
+  { id: 'nav-dash',  icon: 'dashboard', label: 'G7CRM' },
   { id: 'nav-cust',  icon: 'users',     label: 'Accounts' },
   { id: 'nav-deals', icon: 'deals',     label: 'Pipeline' },
   { id: 'nav-tasks', icon: 'tasks',     label: 'Delivery Ops' },
@@ -135,15 +136,17 @@ function initScrollAnimations() {
 }
 
 const PAGE_META = {
-  'index':     { nav: 'nav-dash',  footer: 'Operator mode · CA2 webux upgraded for agency ops' },
-  'customers': { nav: 'nav-cust',  footer: 'Accounts = prospects + clients + delivery readiness' },
+  'index':     { nav: 'nav-home', footer: 'Welcome page = clear offer, clear outcomes, clear next step' },
+  'dashboard': { nav: 'nav-dash', footer: 'G7CRM = internal control room for leads, pipeline, and delivery' },
+  'customers': { nav: 'nav-cust', footer: 'Accounts = prospects + clients + delivery readiness' },
   'deals':     { nav: 'nav-deals', footer: 'Pipeline = offers, setup fees, MRR, and close timing' },
   'tasks':     { nav: 'nav-tasks', footer: 'Execution = sales follow-up, onboarding, delivery, support' },
-  'profile':   { nav: 'nav-cust',  footer: 'Account detail = communication + offers + tasks + lead intake' },
+  'profile':   { nav: 'nav-cust', footer: 'Account detail = communication + offers + tasks + lead intake' },
 };
 
 function detectCurrentPage() {
   const path = window.location.pathname;
+  if (path.includes('dashboard')) return 'dashboard';
   if (path.includes('profile'))   return 'profile';
   if (path.includes('customers')) return 'customers';
   if (path.includes('deals'))     return 'deals';
@@ -158,7 +161,8 @@ function buildSidebar() {
   const currentPage = detectCurrentPage();
   const meta = PAGE_META[currentPage] || PAGE_META['index'];
   const navLinks = [
-    { key: 'index',     file: 'index.html',     id: 'nav-dash' },
+    { key: 'index',     file: 'index.html',      id: 'nav-home' },
+    { key: 'dashboard', file: 'dashboard.html',  id: 'nav-dash' },
     { key: 'customers', file: 'customers.html',  id: 'nav-cust' },
     { key: 'deals',     file: 'deals.html',      id: 'nav-deals' },
     { key: 'tasks',     file: 'tasks.html',      id: 'nav-tasks' },

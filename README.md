@@ -5,8 +5,9 @@ G7CRM is the CRM and operator dashboard inside this repo.
 
 ## Project structure
 
-- `web/` — frontend app files for G7CRM
-  - `index.html`
+- `web/` — frontend app files for the public welcome page and G7CRM
+  - `index.html` — welcome / front page
+  - `dashboard.html` — internal operator dashboard
   - `customers.html`
   - `deals.html`
   - `tasks.html`
@@ -28,8 +29,9 @@ G7CRM is the CRM and operator dashboard inside this repo.
 
 Open the pages from the `web/` folder, or serve that folder with any static server.
 
-Main entry point:
-- `web/index.html`
+Main entry points:
+- `web/index.html` — public welcome page
+- `web/dashboard.html` — internal working area
 
 ## Branding
 
