@@ -12,11 +12,11 @@
 <aside class="sidebar" id="sidebar"></aside>
 
 <main class="main">
-  <header class="page-header page-header-hero">
+  <header class="page-header page-header-hero welcome-topbar">
     <div>
       <div class="eyebrow">Welcome</div>
-      <h2>Automation that protects revenue for local businesses.</h2>
-      <div class="header-sub">G7 Systems helps service businesses respond faster, follow up properly, and waste less time on admin.</div>
+      <h2>Fix the leaks between enquiry and booked work.</h2>
+      <div class="header-sub">G7 Systems builds the response, follow-up, booking, and ops systems local service businesses actually use.</div>
     </div>
     <div class="page-actions hero-actions">
       <a href="dashboard.html" class="btn btn-secondary">Open G7CRM</a>
@@ -25,120 +25,231 @@
   </header>
 
   <div class="page-content page-content-hero welcome-shell">
-    <section class="hero-panel welcome-hero fade-in visible">
-      <div class="welcome-hero-grid">
-        <div class="hero-copy">
-          <div class="eyebrow">What we do</div>
-          <h3>We build practical systems for lead handling, follow-up, booking, and operations.</h3>
-          <p>Most small businesses do not need more software. They need fewer missed leads, faster replies, better follow-up, and less admin. That is what we build.</p>
+    <section class="welcome-command-board fade-in visible">
+      <div class="welcome-command-grid">
+        <div class="welcome-command-copy">
+          <div class="welcome-label-row">
+            <span class="welcome-status-pill">Operator mode</span>
+            <span class="welcome-mono-label">Revenue-first systems</span>
+          </div>
+          <h1 class="welcome-command-title">Front door on the outside. Control room underneath.</h1>
+          <p class="welcome-command-text">Most local businesses do not have a lead problem. They have a response problem, a follow-up problem, and an admin problem. We fix those points first, then connect the flow into G7CRM, Supabase, n8n, and Telegram.</p>
           <div class="welcome-hero-actions">
-            <a href="dashboard.html" class="btn btn-primary">Go to working area</a>
-            <a href="deals.html" class="btn btn-secondary">See pipeline</a>
+            <a href="dashboard.html" class="btn btn-primary">Enter working area</a>
+            <a href="deals.html" class="btn btn-secondary">View pipeline logic</a>
+          </div>
+
+          <div class="welcome-proof-strip">
+            <div class="welcome-proof-item">
+              <span class="welcome-proof-value">5 min</span>
+              <span class="welcome-proof-label">reply target</span>
+            </div>
+            <div class="welcome-proof-item">
+              <span class="welcome-proof-value">0</span>
+              <span class="welcome-proof-label">cold leads overnight</span>
+            </div>
+            <div class="welcome-proof-item">
+              <span class="welcome-proof-value">1</span>
+              <span class="welcome-proof-label">place to track follow-up</span>
+            </div>
           </div>
         </div>
-        <div class="welcome-proof-card">
-          <div class="eyebrow">Business outcome</div>
-          <ul class="welcome-checklist">
-            <li>Turn more enquiries into paying customers</li>
-            <li>Recover leads lost to missed calls and slow replies</li>
-            <li>Reduce admin time with automations that actually get used</li>
-            <li>Cut no-shows with reminders and confirmation flows</li>
-            <li>Bring old customers back with follow-up campaigns</li>
-          </ul>
+
+        <div class="welcome-ops-panel">
+          <div class="welcome-panel-head">
+            <div>
+              <div class="welcome-panel-kicker">Control room preview</div>
+              <h3>Lead response board</h3>
+            </div>
+            <span class="welcome-live-pill">Live logic</span>
+          </div>
+
+          <div class="welcome-metric-grid">
+            <div class="welcome-metric-card">
+              <span class="welcome-metric-label">Missed calls</span>
+              <strong>06</strong>
+              <span class="welcome-metric-sub">today</span>
+            </div>
+            <div class="welcome-metric-card">
+              <span class="welcome-metric-label">Recovered</span>
+              <strong>04</strong>
+              <span class="welcome-metric-sub">text-back sent</span>
+            </div>
+            <div class="welcome-metric-card">
+              <span class="welcome-metric-label">Unworked leads</span>
+              <strong>03</strong>
+              <span class="welcome-metric-sub">need follow-up</span>
+            </div>
+            <div class="welcome-metric-card">
+              <span class="welcome-metric-label">Booked</span>
+              <strong>02</strong>
+              <span class="welcome-metric-sub">from follow-up</span>
+            </div>
+          </div>
+
+          <div class="welcome-log-block">
+            <div class="welcome-log-row">
+              <span class="welcome-log-time">08:41</span>
+              <span class="welcome-log-dot success"></span>
+              <span class="welcome-log-text">Missed call → text-back sent → estimate booked</span>
+            </div>
+            <div class="welcome-log-row">
+              <span class="welcome-log-time">09:13</span>
+              <span class="welcome-log-dot warning"></span>
+              <span class="welcome-log-text">Web lead waiting 14 min → follow-up task created</span>
+            </div>
+            <div class="welcome-log-row">
+              <span class="welcome-log-time">10:02</span>
+              <span class="welcome-log-dot info"></span>
+              <span class="welcome-log-text">Reminder sequence sent for tomorrow's jobs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="welcome-stack-band fade-in visible">
+      <div class="welcome-stack-intro">
+        <div class="eyebrow">Operating stack</div>
+        <h3>Built like an internal system, not a brochure site.</h3>
+      </div>
+      <div class="welcome-stack-grid">
+        <div class="welcome-stack-card">
+          <span class="welcome-stack-tag">Front door</span>
+          <h4>Welcome page</h4>
+          <p>Clear offer, business outcomes, and a next step.</p>
+        </div>
+        <div class="welcome-stack-arrow">→</div>
+        <div class="welcome-stack-card">
+          <span class="welcome-stack-tag">Control room</span>
+          <h4>G7CRM</h4>
+          <p>Leads, accounts, pipeline, and next actions in one place.</p>
+        </div>
+        <div class="welcome-stack-arrow">→</div>
+        <div class="welcome-stack-card">
+          <span class="welcome-stack-tag">Execution</span>
+          <h4>Supabase + n8n + Telegram</h4>
+          <p>Database, automation, and alerts running behind the scenes.</p>
         </div>
       </div>
     </section>
 
     <section class="welcome-section fade-in visible">
-      <div class="section-heading">
-        <div class="eyebrow">How businesses profit</div>
-        <h3>We focus on the places where local businesses quietly lose money.</h3>
-        <p>Position the service around revenue gained and waste removed, not around AI jargon.</p>
+      <div class="section-heading section-heading-compact">
+        <div class="eyebrow">Revenue leaks</div>
+        <h3>Where local businesses quietly lose money.</h3>
+        <p>Instead of vague feature lists, we work the leaks first.</p>
       </div>
-      <div class="welcome-card-grid">
-        <article class="welcome-card">
-          <span class="welcome-kicker">01</span>
-          <h4>More leads converted</h4>
-          <p>Faster replies and proper follow-up mean more enquiries become booked jobs.</p>
+      <div class="welcome-leak-grid">
+        <article class="welcome-leak-card">
+          <span class="welcome-kicker">Leak 01</span>
+          <h4>Missed calls</h4>
+          <p>Phone rings, no answer, customer moves on. We add an instant response path so the lead is not lost.</p>
+          <div class="welcome-flow-mini">Call missed → text-back → reply captured → booking</div>
         </article>
-        <article class="welcome-card">
-          <span class="welcome-kicker">02</span>
-          <h4>Less revenue lost</h4>
-          <p>Missed calls, forgotten follow-up, and weak lead handling stop costing the business money.</p>
+        <article class="welcome-leak-card">
+          <span class="welcome-kicker">Leak 02</span>
+          <h4>Slow follow-up</h4>
+          <p>Lead comes in, nobody follows up properly, and the opportunity goes cold. We create clear follow-up logic with ownership.</p>
+          <div class="welcome-flow-mini">Lead in → SLA timer → task created → status tracked</div>
         </article>
-        <article class="welcome-card">
-          <span class="welcome-kicker">03</span>
-          <h4>Less admin load</h4>
-          <p>Staff spend less time on repetitive tasks and more time on work that actually matters.</p>
+        <article class="welcome-leak-card">
+          <span class="welcome-kicker">Leak 03</span>
+          <h4>No-shows and drop-off</h4>
+          <p>Appointments slip because reminders are weak or inconsistent. We put confirmation and reminder flows in place.</p>
+          <div class="welcome-flow-mini">Booked → reminder → confirm → attend</div>
         </article>
-        <article class="welcome-card">
-          <span class="welcome-kicker">04</span>
-          <h4>More repeat business</h4>
-          <p>Reminder, reactivation, and review flows help turn old customers into new revenue.</p>
+        <article class="welcome-leak-card">
+          <span class="welcome-kicker">Leak 04</span>
+          <h4>Dead customer lists</h4>
+          <p>Old customers sit unused. We build reactivation and review sequences that turn past jobs into more revenue.</p>
+          <div class="welcome-flow-mini">Past customer → check-in → offer → repeat work</div>
         </article>
       </div>
     </section>
 
     <section class="welcome-section fade-in visible">
-      <div class="section-heading">
-        <div class="eyebrow">Services</div>
-        <h3>Simple offers that solve expensive problems.</h3>
+      <div class="section-heading section-heading-compact">
+        <div class="eyebrow">Workflows</div>
+        <h3>Practical systems, not generic automations.</h3>
       </div>
-      <div class="welcome-service-grid">
-        <article class="welcome-service-card">
-          <h4>Lead capture and follow-up</h4>
-          <p>Capture enquiries from forms, calls, and messages, then move them into a clear follow-up flow.</p>
+      <div class="welcome-workflow-grid">
+        <article class="welcome-workflow-card">
+          <div class="welcome-workflow-head">
+            <span class="welcome-stack-tag">Workflow A</span>
+            <h4>Lead capture and routing</h4>
+          </div>
+          <ul class="welcome-flow-list">
+            <li><strong>Trigger:</strong> website form, phone call, or message</li>
+            <li><strong>Action:</strong> capture details and assign status</li>
+            <li><strong>Handoff:</strong> send into G7CRM and task queue</li>
+            <li><strong>Outcome:</strong> nothing sits invisible</li>
+          </ul>
         </article>
-        <article class="welcome-service-card">
-          <h4>Missed call text-back</h4>
-          <p>Respond instantly when the phone is missed so the business does not lose the lead to a competitor.</p>
+        <article class="welcome-workflow-card">
+          <div class="welcome-workflow-head">
+            <span class="welcome-stack-tag">Workflow B</span>
+            <h4>Missed call recovery</h4>
+          </div>
+          <ul class="welcome-flow-list">
+            <li><strong>Trigger:</strong> call missed or after-hours contact</li>
+            <li><strong>Action:</strong> instant text-back with next step</li>
+            <li><strong>Handoff:</strong> alert owner or office when reply lands</li>
+            <li><strong>Outcome:</strong> fewer lost enquiries</li>
+          </ul>
         </article>
-        <article class="welcome-service-card">
-          <h4>Booking and reminders</h4>
-          <p>Automate confirmations, reminders, and rebooking prompts to protect booked revenue.</p>
+        <article class="welcome-workflow-card">
+          <div class="welcome-workflow-head">
+            <span class="welcome-stack-tag">Workflow C</span>
+            <h4>Booking and reminders</h4>
+          </div>
+          <ul class="welcome-flow-list">
+            <li><strong>Trigger:</strong> job or appointment confirmed</li>
+            <li><strong>Action:</strong> reminder and confirmation sequence</li>
+            <li><strong>Handoff:</strong> internal alert if customer does not confirm</li>
+            <li><strong>Outcome:</strong> fewer no-shows and cleaner diaries</li>
+          </ul>
         </article>
-        <article class="welcome-service-card">
-          <h4>CRM and pipeline setup</h4>
-          <p>Give the business one place to track leads, offers, clients, and next actions without chaos.</p>
-        </article>
-        <article class="welcome-service-card">
-          <h4>Review and reactivation flows</h4>
-          <p>Ask for reviews at the right time and bring inactive customers back into the pipeline.</p>
-        </article>
-        <article class="welcome-service-card">
-          <h4>Operations automations</h4>
-          <p>Remove repetitive admin across intake, handover, status updates, and internal alerts.</p>
+        <article class="welcome-workflow-card">
+          <div class="welcome-workflow-head">
+            <span class="welcome-stack-tag">Workflow D</span>
+            <h4>Reactivation and reviews</h4>
+          </div>
+          <ul class="welcome-flow-list">
+            <li><strong>Trigger:</strong> finished job or inactive customer list</li>
+            <li><strong>Action:</strong> review request or reactivation message</li>
+            <li><strong>Handoff:</strong> replies logged back into the CRM</li>
+            <li><strong>Outcome:</strong> more repeat business from existing demand</li>
+          </ul>
         </article>
       </div>
     </section>
 
-    <section class="welcome-section welcome-split fade-in visible">
-      <div class="card welcome-copy-card">
-        <div class="card-header">
-          <span class="card-title">Best fit</span>
-        </div>
-        <div class="card-body">
-          <ul class="welcome-bullet-list">
-            <li>Home services</li>
-            <li>Local service businesses</li>
-            <li>Teams missing leads because replies are too slow</li>
-            <li>Businesses with messy follow-up or no real CRM process</li>
-            <li>Owners who want more revenue without adding more manual work</li>
-          </ul>
-        </div>
+    <section class="welcome-process-strip fade-in visible">
+      <div class="section-heading section-heading-compact">
+        <div class="eyebrow">How we work</div>
+        <h3>One workflow at a time, tied to money.</h3>
       </div>
-      <div class="card welcome-copy-card">
-        <div class="card-header">
-          <span class="card-title">How we work</span>
+      <div class="welcome-process-grid">
+        <div class="welcome-step-card">
+          <span>01</span>
+          <h4>Find the leak</h4>
+          <p>Identify where leads, bookings, or staff time are being lost.</p>
         </div>
-        <div class="card-body">
-          <ul class="welcome-bullet-list">
-            <li>Find where revenue is leaking</li>
-            <li>Pick the highest-value workflow first</li>
-            <li>Build a simple working system</li>
-            <li>Connect it to G7CRM, Supabase, n8n, and Telegram where needed</li>
-            <li>Keep improving based on what creates revenue or saves time</li>
-          </ul>
+        <div class="welcome-step-card">
+          <span>02</span>
+          <h4>Choose the highest-value fix</h4>
+          <p>Start with the workflow most likely to recover revenue quickly.</p>
+        </div>
+        <div class="welcome-step-card">
+          <span>03</span>
+          <h4>Build the system</h4>
+          <p>Connect capture, follow-up, status tracking, and alerts into one flow.</p>
+        </div>
+        <div class="welcome-step-card">
+          <span>04</span>
+          <h4>Track what changed</h4>
+          <p>Measure response speed, booked work, admin time saved, and next bottlenecks.</p>
         </div>
       </div>
     </section>
@@ -147,8 +258,8 @@
       <div class="card-body welcome-cta-body">
         <div>
           <div class="eyebrow">Next step</div>
-          <h3>Use this page as the front door. Use G7CRM as the control room.</h3>
-          <p>Public explanation on the outside. Real operating work inside the dashboard.</p>
+          <h3>Use the welcome page as the front door. Use G7CRM as the working area.</h3>
+          <p>This keeps the public side simple and keeps the real work inside the system.</p>
         </div>
         <div class="welcome-cta-actions">
           <a href="dashboard.html" class="btn btn-primary">Open dashboard</a>
