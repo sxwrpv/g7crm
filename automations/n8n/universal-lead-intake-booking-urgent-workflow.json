@@ -224,26 +224,21 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "url": "https://api.resend.com/emails",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.RESEND_API_KEY }}" },
             { "name": "Content-Type", "value": "application/json" }
           ]
         },
         "sendBody": true,
         "contentType": "json",
-        "specifyBody": "keypair",
-        "bodyParameters": {
-          "parameters": [
-            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
-            { "name": "text", "value": "={{$json.telegram_message}}" },
-            { "name": "disable_web_page_preview", "value": true }
-          ]
-        }
+        "specifyBody": "json",
+        "jsonBody": "={{ { from: ($env.ALERT_EMAIL_FROM || 'G7CRM Alerts <onboarding@resend.dev>'), to: [$env.ALERT_EMAIL_TO], subject: ($json.inquiry_type === 'urgent-call' ? '[URGENT] ' : ($json.inquiry_type === 'booking' ? '[Booking] ' : '[Lead] ')) + $json.business_name + ' — G7CRM', text: $json.telegram_message } }}"
       },
-      "id": "telegram-node",
-      "name": "Send Telegram Alert",
+      "id": "email-alert-node",
+      "name": "Send Email Alert",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [2340, 300]
@@ -257,7 +252,7 @@
     "Build Routing Payload": { "main": [[{ "node": "Mark Submission Processed", "type": "main", "index": 0 }]] },
     "Mark Submission Processed": { "main": [[{ "node": "Create Follow-up Task", "type": "main", "index": 0 }]] },
     "Create Follow-up Task": { "main": [[{ "node": "Log Automation Run", "type": "main", "index": 0 }]] },
-    "Log Automation Run": { "main": [[{ "node": "Send Telegram Alert", "type": "main", "index": 0 }]] }
+    "Log Automation Run": { "main": [[{ "node": "Send Email Alert", "type": "main", "index": 0 }]] }
   },
   "pinData": {},
   "settings": {

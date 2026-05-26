@@ -99,8 +99,9 @@ N8N_ENCRYPTION_KEY=<paste 32+ random chars — KEEP THIS SAFE, it encrypts your 
 # Used by the lead-intake workflow:
 SUPABASE_URL=https://fbstesgbttojfysznddq.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=<paste from Supabase → Settings → API → service_role secret>
-TELEGRAM_BOT_TOKEN=<from step 5>
-TELEGRAM_CHAT_ID=<from step 5>
+RESEND_API_KEY=<from step 5>
+ALERT_EMAIL_TO=sxwrpv2022@gmail.com
+ALERT_EMAIL_FROM=G7CRM Alerts <onboarding@resend.dev>
 ```
 
 > ⚠️ `SUPABASE_SERVICE_ROLE_KEY` bypasses RLS. Never paste it into client-side code, the n8n workflow JSON, or anywhere public. Railway env vars are the right home.
@@ -118,22 +119,27 @@ n8n on Railway will ask you to create an owner account on first visit:
 
 ---
 
-## 5. Create the Telegram bot
+## 5. Set up Resend (email alerts)
 
-1. Open Telegram. Search **@BotFather** → start chat.
-2. `/newbot` → name it `G7 Systems Alerts` → username e.g. `g7systems_alerts_bot`.
-3. BotFather replies with a token like `1234567890:AAH...`. **Copy it** — this is your `TELEGRAM_BOT_TOKEN`.
-4. In Telegram, search your new bot → **Start**. (Bots can't message you until you've started the chat.)
-5. Get your chat_id: send any message to the bot, then in a browser open
-   `https://api.telegram.org/bot<TOKEN>/getUpdates`
-   Look for `"chat":{"id":1234567}`. That number is your `TELEGRAM_CHAT_ID`.
-6. Paste both into Railway env vars (step 4b).
-7. Test from a terminal:
+Operator alerts go to your inbox via Resend (free: 100 emails/day, 3000/month — plenty for our volume).
+
+1. https://resend.com → **Sign up** (use your personal Gmail).
+2. After verifying your email, you land on the dashboard.
+3. Left sidebar → **API Keys** → **Create API Key**.
+4. Name: `g7crm-n8n` · Permission: `Sending access` · Domain: `All domains`.
+5. **Copy** the key (starts with `re_…`). Save it in your password manager — Resend won't show it again.
+6. Paste it into Railway as `RESEND_API_KEY` (step 4b).
+
+> **Sender domain**: by default the workflow sends from `onboarding@resend.dev` (Resend's free sandbox sender — no setup needed). When you finish setting up `g7systems.xyz` mail later, you can verify the domain in Resend → **Domains** and switch `ALERT_EMAIL_FROM` to e.g. `G7CRM Alerts <alerts@g7systems.xyz>`.
+
+7. Test from a terminal (paste your real key + email):
    ```bash
-   curl -s "https://api.telegram.org/bot<TOKEN>/sendMessage" \
-     -d chat_id=<CHAT_ID> -d text="G7 bot online."
+   curl -s https://api.resend.com/emails \
+     -H "Authorization: Bearer <YOUR_RESEND_KEY>" \
+     -H "Content-Type: application/json" \
+     -d '{"from":"G7CRM Alerts <onboarding@resend.dev>","to":["sxwrpv2022@gmail.com"],"subject":"G7CRM test","text":"Resend is wired up."}'
    ```
-   You should get the message on Telegram.
+   You should get an email within ~10 seconds. Check Spam if it doesn't appear.
 
 ---
 
@@ -148,7 +154,7 @@ After Railway gives you the webhook URL (step 4d):
    ```
 3. Commit + push. Vercel auto-redeploys.
 
-While `n8nLeadWebhookUrl` is empty the form posts straight to Supabase `lead_submissions` (works, just no Telegram alert / customer upsert / task created). Once set, n8n handles the full flow.
+While `n8nLeadWebhookUrl` is empty the form posts straight to Supabase `lead_submissions` (works, just no email alert / customer upsert / task created). Once set, n8n handles the full flow.
 
 ---
 
@@ -156,8 +162,8 @@ While `n8nLeadWebhookUrl` is empty the form posts straight to Supabase `lead_sub
 
 1. Open https://g7systems.xyz in a private window.
 2. Submit the lead form with real-looking test data (use `urgency=emergency` to test the urgent path).
-3. Expect within 5 seconds:
-   - Telegram message to your bot.
+3. Expect within 10 seconds:
+   - Email lands in `ALERT_EMAIL_TO` inbox (check Spam folder for first one).
    - https://g7systems.xyz/dashboard.html shows the new lead in "Recent Lead Intake" (sign in first).
    - https://g7systems.xyz/customers.html shows a new customer row.
    - https://g7systems.xyz/tasks.html shows a new follow-up task.
@@ -167,9 +173,10 @@ While `n8nLeadWebhookUrl` is empty the form posts straight to Supabase `lead_sub
 
 ## 8. Things not wired yet (decide later)
 
-- **Booking confirmation email** — needs an SMTP credential. Easiest: SendGrid free tier or Resend.
-- **Apple Calendar event** for bookings — the workflow builds the payload, but the original localhost calendar bridge is gone. Either run a small Vercel/Cloudflare worker that hits CalDAV, or switch bookings to Google Calendar (which n8n has a native node for).
-- **Twilio / WhatsApp send-back for missed-call recovery** — separate workflow, not required for v1.
+- **Customer-facing booking confirmation email** — different from operator alert. Add a second n8n node that emails the *lead* via Resend (only if booking → `inquiry_type === 'booking'`).
+- **WhatsApp messaging** — the real Irish channel for client comms. Twilio WhatsApp Business API is the path; needs Meta approval and a paid Twilio account. Worth doing once you have your first paying client.
+- **Apple/Google Calendar event** for bookings — the workflow builds the payload, but the original localhost calendar bridge is gone. Switch to Google Calendar via n8n's native node when needed.
+- **Verify g7systems.xyz in Resend** to send alerts from `alerts@g7systems.xyz` instead of `onboarding@resend.dev` (Resend → Domains → Add → paste the DNS records into Namecheap).
 - **Rate-limiting the public form** — currently anyone can spam `lead_submissions`. If it becomes a problem, add a Cloudflare Turnstile widget on the form and verify on the backend (Supabase Edge Function).
 
 ---
@@ -179,5 +186,5 @@ While `n8nLeadWebhookUrl` is empty the form posts straight to Supabase `lead_sub
 - Active Supabase project: `fbstesgbttojfysznddq` (region eu-central-1)
 - GitHub: https://github.com/sxwrpv/g7crm (private)
 - Domain: g7systems.xyz (Namecheap)
-- Admin inbox: hello@g7systems.xyz
-- Telegram alerts go to: the bot you created in step 5 (which DMs the chat_id you captured)
+- Admin inbox (planned): hello@g7systems.xyz — not yet receiving mail (no MX records). Until set up, alerts go to your personal Gmail.
+- Email alerts: sent via Resend from `onboarding@resend.dev` to `ALERT_EMAIL_TO` (sxwrpv2022@gmail.com).
