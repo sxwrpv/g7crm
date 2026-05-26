@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G7 Systems — Lead recovery for Irish home-services trades</title>
-  <meta name="theme-color" content="#0B1220" />
+  <meta name="theme-color" content="#0A0A0A" />
   <meta name="description" content="Stop losing jobs to slow replies. We catch every enquiry, reply in 5 minutes, and book the work — for plumbers, electricians, and home-services trades in Ireland." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="home-page">
@@ -27,31 +30,67 @@
 
   <!-- Hero -->
   <section class="home-hero">
-    <div class="home-hero-eyebrow">For plumbers · electricians · HVAC · home-services trades in Ireland</div>
-    <h1 class="home-hero-title">
-      Stop losing jobs to <span class="home-hl">slow replies</span>.
-    </h1>
-    <p class="home-hero-text">
-      Every missed call, late DM, and forgotten follow-up is a job your competitor takes. We catch the lead, reply within 5 minutes, and book the work — so the diary stays full and you stay on the tools.
-    </p>
-    <div class="home-hero-cta">
-      <a href="#audit" class="home-btn home-btn-primary">Get a free 15-min audit →</a>
-      <a href="#how" class="home-btn home-btn-ghost">See how it works</a>
+    <div class="home-hero-bg" aria-hidden="true"></div>
+    <div class="home-hero-inner">
+      <div class="home-hero-pill">
+        <span class="home-hero-dot"></span> Now onboarding Dublin trades · 2 slots this month
+      </div>
+      <h1 class="home-hero-title">
+        Stop losing jobs<br>to <span class="home-hl">slow replies</span>.
+      </h1>
+      <p class="home-hero-text">
+        Every missed call, late DM, and forgotten follow-up is a job your competitor takes. We catch the lead, reply within five minutes, and book the work — so the diary stays full and you stay on the tools.
+      </p>
+      <div class="home-hero-cta">
+        <a href="#audit" class="home-btn home-btn-primary">Get a free 15-min audit <span class="home-btn-arrow">→</span></a>
+        <a href="#how" class="home-btn home-btn-ghost">See how it works</a>
+      </div>
     </div>
 
     <div class="home-stats">
       <div class="home-stat">
-        <div class="home-stat-num">~30%</div>
+        <div class="home-stat-num">~30<span class="home-stat-unit">%</span></div>
         <div class="home-stat-lbl">of calls go unanswered when you're on a job</div>
       </div>
       <div class="home-stat">
-        <div class="home-stat-num">€400+</div>
+        <div class="home-stat-num">€400<span class="home-stat-unit">+</span></div>
         <div class="home-stat-lbl">average value of one missed job in Dublin</div>
       </div>
       <div class="home-stat">
-        <div class="home-stat-num">5 min</div>
+        <div class="home-stat-num">5<span class="home-stat-unit">&nbsp;min</span></div>
         <div class="home-stat-lbl">our reply SLA — day, night, weekend</div>
       </div>
+    </div>
+  </section>
+
+  <!-- Trades marquee -->
+  <section class="home-marquee" aria-hidden="true">
+    <div class="home-marquee-track">
+      <span>Plumbing</span><span>·</span>
+      <span>Electrical</span><span>·</span>
+      <span>HVAC / Heating</span><span>·</span>
+      <span>Carpentry</span><span>·</span>
+      <span>Painting</span><span>·</span>
+      <span>Roofing</span><span>·</span>
+      <span>Locksmith</span><span>·</span>
+      <span>Cleaning</span><span>·</span>
+      <span>Appliance Repair</span><span>·</span>
+      <span>Pest Control</span><span>·</span>
+      <span>Gardening</span><span>·</span>
+      <span>Handyman</span><span>·</span>
+      <!-- duplicate for seamless loop -->
+      <span>Plumbing</span><span>·</span>
+      <span>Electrical</span><span>·</span>
+      <span>HVAC / Heating</span><span>·</span>
+      <span>Carpentry</span><span>·</span>
+      <span>Painting</span><span>·</span>
+      <span>Roofing</span><span>·</span>
+      <span>Locksmith</span><span>·</span>
+      <span>Cleaning</span><span>·</span>
+      <span>Appliance Repair</span><span>·</span>
+      <span>Pest Control</span><span>·</span>
+      <span>Gardening</span><span>·</span>
+      <span>Handyman</span><span>·</span>
     </div>
   </section>
 
@@ -59,7 +98,7 @@
   <section class="home-section home-section-leak">
     <div class="home-section-head">
       <div class="home-eyebrow">Where the money goes</div>
-      <h2>Four leaks. One system to close them.</h2>
+      <h2>Four leaks. One system to <span class="home-hl-soft">close them</span>.</h2>
       <p>You don't need more marketing. You need to stop losing the leads you already have.</p>
     </div>
     <ol class="home-leak-list">
@@ -98,7 +137,7 @@
   <section class="home-section home-section-how" id="how">
     <div class="home-section-head">
       <div class="home-eyebrow">The system</div>
-      <h2>Three pieces. Live in 48 hours.</h2>
+      <h2>Three pieces. Live in <span class="home-hl-soft">48 hours</span>.</h2>
       <p>No app to download. No new login for you. We plug into your phone, your forms, and your inbox.</p>
     </div>
     <div class="home-steps">
@@ -125,12 +164,12 @@
     <div class="home-form-grid">
       <div class="home-form-copy">
         <div class="home-eyebrow home-eyebrow-on-dark">Free audit</div>
-        <h2>We'll show you where the money's leaking.</h2>
+        <h2>We'll show you where the <span class="home-hl">money's leaking</span>.</h2>
         <p>15 minutes. We look at your missed-call rate, your reply times, and your booking flow. You get a 1-page action list. No pitch unless you ask for one.</p>
         <ul class="home-form-checks">
-          <li>✓ Honest read on what's costing you most</li>
-          <li>✓ Dublin-first; we know the local context</li>
-          <li>✓ Quote on day 2 if you want us to fix it</li>
+          <li><span class="home-check">✓</span> Honest read on what's costing you most</li>
+          <li><span class="home-check">✓</span> Dublin-first — we know the local context</li>
+          <li><span class="home-check">✓</span> Quote on day 2 if you want us to fix it</li>
         </ul>
       </div>
 
