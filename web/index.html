@@ -49,15 +49,15 @@
 
     <div class="home-stats">
       <div class="home-stat">
-        <div class="home-stat-num">~30<span class="home-stat-unit">%</span></div>
+        <div class="home-stat-num" data-count-to="30" data-prefix="~"><span class="home-stat-num-val">~30</span><span class="home-stat-unit">%</span></div>
         <div class="home-stat-lbl">of calls go unanswered when you're on a job</div>
       </div>
       <div class="home-stat">
-        <div class="home-stat-num">€400<span class="home-stat-unit">+</span></div>
+        <div class="home-stat-num" data-count-to="400" data-prefix="€"><span class="home-stat-num-val">€400</span><span class="home-stat-unit">+</span></div>
         <div class="home-stat-lbl">average value of one missed job in Dublin</div>
       </div>
       <div class="home-stat">
-        <div class="home-stat-num">5<span class="home-stat-unit">&nbsp;min</span></div>
+        <div class="home-stat-num" data-count-to="5"><span class="home-stat-num-val">5</span><span class="home-stat-unit">&nbsp;min</span></div>
         <div class="home-stat-lbl">our reply SLA — day, night, weekend</div>
       </div>
     </div>
@@ -228,6 +228,80 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script>
+// ---------- Scroll-reveal + number count-up ----------
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal targets: every meaningful block on the home page
+  const revealSelectors = [
+    '.home-section-head',
+    '.home-leak-list li',
+    '.home-step',
+    '.home-form-copy',
+    '.home-form',
+    '.home-stat',
+  ];
+  const revealEls = document.querySelectorAll(revealSelectors.join(','));
+  revealEls.forEach(el => el.classList.add('fade-in'));
+
+  if (reduce || !('IntersectionObserver' in window)) {
+    revealEls.forEach(el => el.classList.add('visible'));
+  } else {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), Math.min(i, 4) * 70);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => revealObserver.observe(el));
+  }
+
+  // Number count-up on stats
+  function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+  function runCountUp(host) {
+    const target = Number(host.dataset.countTo);
+    const prefix = host.dataset.prefix || '';
+    const valEl  = host.querySelector('.home-stat-num-val');
+    if (!valEl || !Number.isFinite(target)) return;
+
+    const duration = 1400;
+    const start = performance.now();
+
+    function frame(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const v = Math.round(easeOutQuart(t) * target);
+      valEl.textContent = prefix + v;
+      if (t < 1) requestAnimationFrame(frame);
+      else valEl.textContent = prefix + target;
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const countEls = document.querySelectorAll('.home-stat-num[data-count-to]');
+  if (reduce || !('IntersectionObserver' in window)) {
+    // Leave the static fallback text as-is
+  } else {
+    // Reset to 0 before observing (so we see the animation)
+    countEls.forEach(el => {
+      const prefix = el.dataset.prefix || '';
+      const val = el.querySelector('.home-stat-num-val');
+      if (val) val.textContent = prefix + '0';
+    });
+    const countObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          runCountUp(entry.target);
+          countObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    countEls.forEach(el => countObserver.observe(el));
+  }
+})();
+
 document.getElementById('leadForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
