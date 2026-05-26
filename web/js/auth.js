@@ -62,40 +62,69 @@ function showOverlay(errorMsg = '') {
       #g7-auth-overlay button {
         width: 100%; padding: 12px; border: 0; border-radius: 8px;
         background: #111; color: #fff; font-size: 15px; cursor: pointer;
+        margin-bottom: 8px;
+      }
+      #g7-auth-overlay button.secondary {
+        background: #fff; color: #555; border: 1px solid #ddd;
       }
       #g7-auth-overlay button:disabled { opacity: .6; cursor: progress; }
-      #g7-auth-overlay .msg { margin-top: 14px; color: #666; font-size: 13px; min-height: 18px; }
+      #g7-auth-overlay .msg { margin-top: 6px; color: #666; font-size: 13px; min-height: 18px; }
       #g7-auth-overlay .err { color: #c0392b; }
+      #g7-auth-overlay .hint { font-size: 12px; color: #888; margin-top: 14px; text-align: center; }
     </style>
     <div class="card">
       <h2>G7CRM</h2>
       <p>Operator sign-in.</p>
       <input id="g7-auth-email" type="email" placeholder="you@g7systems.xyz" autocomplete="email" />
-      <button id="g7-auth-btn" type="button">Send magic link</button>
+      <input id="g7-auth-password" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="g7-auth-btn-password" type="button">Sign in</button>
+      <button id="g7-auth-btn-magic" type="button" class="secondary">Send magic link instead</button>
       <div class="msg ${errorMsg ? 'err' : ''}" id="g7-auth-msg">${errorMsg || ''}</div>
+      <div class="hint">Add a user in Supabase &rarr; Authentication &rarr; Users.</div>
     </div>
   `;
   document.body.appendChild(overlay);
 
-  document.getElementById('g7-auth-btn').onclick = async () => {
-    const email = document.getElementById('g7-auth-email').value.trim();
-    const msg = document.getElementById('g7-auth-msg');
-    const btn = document.getElementById('g7-auth-btn');
-    if (!email) { msg.textContent = 'Enter your email.'; msg.classList.add('err'); return; }
-    btn.disabled = true;
-    msg.classList.remove('err');
-    msg.textContent = 'Sending magic link…';
+  const emailEl    = document.getElementById('g7-auth-email');
+  const passEl     = document.getElementById('g7-auth-password');
+  const msg        = document.getElementById('g7-auth-msg');
+  const btnPass    = document.getElementById('g7-auth-btn-password');
+  const btnMagic   = document.getElementById('g7-auth-btn-magic');
+
+  function setMsg(text, isErr = false) {
+    msg.classList.toggle('err', isErr);
+    msg.textContent = text;
+  }
+
+  // Password submits on Enter from either field
+  [emailEl, passEl].forEach(el => el.addEventListener('keydown', e => {
+    if (e.key === 'Enter') btnPass.click();
+  }));
+
+  btnPass.onclick = async () => {
+    const email = emailEl.value.trim();
+    const password = passEl.value;
+    if (!email || !password) { setMsg('Enter email and password.', true); return; }
+    btnPass.disabled = true; btnMagic.disabled = true;
+    setMsg('Signing in…');
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    btnPass.disabled = false; btnMagic.disabled = false;
+    if (error) setMsg(error.message, true);
+    // success path handled by onAuthStateChange above
+  };
+
+  btnMagic.onclick = async () => {
+    const email = emailEl.value.trim();
+    if (!email) { setMsg('Enter your email.', true); return; }
+    btnPass.disabled = true; btnMagic.disabled = true;
+    setMsg('Sending magic link…');
     const { error } = await db.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: window.location.href }
     });
-    btn.disabled = false;
-    if (error) {
-      msg.classList.add('err');
-      msg.textContent = error.message;
-    } else {
-      msg.textContent = 'Check your inbox. Click the link to sign in.';
-    }
+    btnPass.disabled = false; btnMagic.disabled = false;
+    if (error) setMsg(error.message, true);
+    else setMsg('Check your inbox. Click the link to sign in.');
   };
 }
 
