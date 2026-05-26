@@ -21,7 +21,7 @@
       "parameters": {
         "mode": "runOnceForEachItem",
         "language": "javaScript",
-        "jsCode": "const body = $json.body ?? $json;\nconst now = new Date();\nconst leadName = body.name ?? body.lead_name ?? 'Unknown Lead';\nconst businessName = body.business_name ?? body.company ?? body.account_name ?? 'Unknown Business';\nconst leadEmail = body.email ?? body.lead_email ?? null;\nconst leadPhone = body.phone ?? body.lead_phone ?? null;\nconst serviceRequested = body.service ?? body.service_requested ?? 'General enquiry';\nconst message = body.message ?? body.lead_message ?? body.notes ?? '';\nconst sourceChannel = body.source_channel ?? body.lead_source ?? 'website-form';\nconst rawUrgency = String(body.urgency ?? 'normal').toLowerCase();\nconst urgency = ['low','normal','high','emergency'].includes(rawUrgency) ? rawUrgency : 'normal';\nconst assignedTo = body.assigned_to ?? 'ops';\nconst alertDestination = body.alert_destination ?? '@sxwrpv1';\nconst niche = body.niche ?? 'Home Services';\nconst requestedDate = body.booking_date ?? body.requested_date ?? body.date ?? null;\nconst requestedTime = body.booking_time ?? body.requested_time ?? body.time ?? null;\nconst bookingDurationMinutes = Number(body.booking_duration_minutes ?? body.duration_minutes ?? 60);\nconst bookingCalendar = body.booking_calendar ?? body.calendar_name ?? 'Work';\nconst requestType = String(body.inquiry_type ?? body.request_type ?? body.intent ?? '').toLowerCase();\nconst callNow = body.call_now === true || String(body.call_now ?? '').toLowerCase() === 'true';\nconst isBooking = requestType.includes('booking') || (!!requestedDate && !!requestedTime);\nconst isUrgentCall = requestType.includes('urgent') || requestType.includes('call') || callNow || ['urgent', 'emergency'].includes(urgency);\nlet inquiryType = 'standard';\nif (isBooking) inquiryType = 'booking';\nelse if (isUrgentCall) inquiryType = 'urgent-call';\nconst bookingDetailsComplete = !!requestedDate && !!requestedTime;\nconst bookingStatus = inquiryType === 'booking' ? 'requested' : 'not-applicable';\nreturn { json: {\n  received_at: now.toISOString(),\n  processed_at: now.toISOString(),\n  run_id: `run_${Date.now()}`,\n  lead_name: leadName,\n  business_name: businessName,\n  lead_email: leadEmail,\n  lead_phone: leadPhone,\n  service_requested: serviceRequested,\n  message,\n  source_channel: sourceChannel,\n  urgency,\n  assigned_to: assignedTo,\n  alert_destination: alertDestination,\n  niche,\n  inquiry_type: inquiryType,\n  requested_booking_date: requestedDate,\n  requested_booking_time: requestedTime,\n  booking_status: bookingStatus,\n  booking_calendar: bookingCalendar,\n  booking_duration_minutes: Number.isFinite(bookingDurationMinutes) ? bookingDurationMinutes : 60,\n  booking_details_complete: bookingDetailsComplete\n} };"
+        "jsCode": "const body = $json.body ?? $json;\nconst now = new Date();\nconst leadName = body.name ?? body.lead_name ?? 'Unknown Lead';\nconst businessName = body.business_name ?? body.company ?? body.account_name ?? 'Unknown Business';\nconst leadEmail = body.email ?? body.lead_email ?? null;\nconst leadPhone = body.phone ?? body.lead_phone ?? null;\nconst serviceRequested = body.service ?? body.service_requested ?? 'General enquiry';\nconst message = body.message ?? body.lead_message ?? body.notes ?? '';\nconst sourceChannel = body.source_channel ?? body.lead_source ?? 'website-form';\nconst rawUrgency = String(body.urgency ?? 'normal').toLowerCase();\nconst urgency = ['low','normal','high','emergency'].includes(rawUrgency) ? rawUrgency : 'normal';\nconst assignedTo = body.assigned_to ?? 'ops';\nconst alertDestination = body.alert_destination ?? ($env.TELEGRAM_CHAT_ID || '');\nconst niche = body.niche ?? 'Home Services';\nconst requestedDate = body.booking_date ?? body.requested_date ?? body.date ?? null;\nconst requestedTime = body.booking_time ?? body.requested_time ?? body.time ?? null;\nconst bookingDurationMinutes = Number(body.booking_duration_minutes ?? body.duration_minutes ?? 60);\nconst bookingCalendar = body.booking_calendar ?? body.calendar_name ?? 'Work';\nconst requestType = String(body.inquiry_type ?? body.request_type ?? body.intent ?? '').toLowerCase();\nconst callNow = body.call_now === true || String(body.call_now ?? '').toLowerCase() === 'true';\nconst isBooking = requestType.includes('booking') || (!!requestedDate && !!requestedTime);\nconst isUrgentCall = requestType.includes('urgent') || requestType.includes('call') || callNow || ['urgent', 'emergency'].includes(urgency);\nlet inquiryType = 'standard';\nif (isBooking) inquiryType = 'booking';\nelse if (isUrgentCall) inquiryType = 'urgent-call';\nconst bookingDetailsComplete = !!requestedDate && !!requestedTime;\nconst bookingStatus = inquiryType === 'booking' ? 'requested' : 'not-applicable';\nreturn { json: {\n  received_at: now.toISOString(),\n  processed_at: now.toISOString(),\n  run_id: `run_${Date.now()}`,\n  lead_name: leadName,\n  business_name: businessName,\n  lead_email: leadEmail,\n  lead_phone: leadPhone,\n  service_requested: serviceRequested,\n  message,\n  source_channel: sourceChannel,\n  urgency,\n  assigned_to: assignedTo,\n  alert_destination: alertDestination,\n  niche,\n  inquiry_type: inquiryType,\n  requested_booking_date: requestedDate,\n  requested_booking_time: requestedTime,\n  booking_status: bookingStatus,\n  booking_calendar: bookingCalendar,\n  booking_duration_minutes: Number.isFinite(bookingDurationMinutes) ? bookingDurationMinutes : 60,\n  booking_details_complete: bookingDetailsComplete\n} };"
       },
       "id": "normalize-route-node",
       "name": "Normalize + Route Lead",
@@ -32,12 +32,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://fbstesgbttojfysznddq.supabase.co/rest/v1/lead_submissions",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/lead_submissions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
-            { "name": "Authorization", "value": "Bearer sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
             { "name": "Content-Type", "value": "application/json" },
             { "name": "Prefer", "value": "return=representation" }
           ]
@@ -74,12 +74,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://fbstesgbttojfysznddq.supabase.co/rest/v1/customers?on_conflict=email",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/customers?on_conflict=email",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
-            { "name": "Authorization", "value": "Bearer sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
             { "name": "Content-Type", "value": "application/json" },
             { "name": "Prefer", "value": "resolution=merge-duplicates,return=representation" }
           ]
@@ -125,12 +125,12 @@
     {
       "parameters": {
         "method": "PATCH",
-        "url": "={{'https://fbstesgbttojfysznddq.supabase.co/rest/v1/lead_submissions?id=eq.' + $json.lead_submission_id}}",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/lead_submissions?id=eq.{{$json.lead_submission_id}}",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
-            { "name": "Authorization", "value": "Bearer sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
             { "name": "Content-Type", "value": "application/json" },
             { "name": "Prefer", "value": "return=representation" }
           ]
@@ -155,12 +155,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://fbstesgbttojfysznddq.supabase.co/rest/v1/tasks",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/tasks",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
-            { "name": "Authorization", "value": "Bearer sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
             { "name": "Content-Type", "value": "application/json" },
             { "name": "Prefer", "value": "return=representation" }
           ]
@@ -190,12 +190,12 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://fbstesgbttojfysznddq.supabase.co/rest/v1/automation_runs",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/automation_runs",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "apikey", "value": "sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
-            { "name": "Authorization", "value": "Bearer sb_publishable_4cSGroJ_acAu_YhAvocx8w_Gg-USqAe" },
+            { "name": "apikey", "value": "={{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_ROLE_KEY }}" },
             { "name": "Content-Type", "value": "application/json" },
             { "name": "Prefer", "value": "return=representation" }
           ]
@@ -224,14 +224,21 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://127.0.0.1:8765/send",
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
         "sendBody": true,
         "contentType": "json",
         "specifyBody": "keypair",
         "bodyParameters": {
           "parameters": [
-            { "name": "target", "value": "={{$json.alert_destination}}" },
-            { "name": "message", "value": "={{$json.telegram_message}}" }
+            { "name": "chat_id", "value": "={{ $env.TELEGRAM_CHAT_ID }}" },
+            { "name": "text", "value": "={{$json.telegram_message}}" },
+            { "name": "disable_web_page_preview", "value": true }
           ]
         }
       },
@@ -256,7 +263,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "universal-lead-intake-booking-urgent-v1",
+  "versionId": "universal-lead-intake-booking-urgent-v2-railway",
   "meta": {
     "templateCredsSetupCompleted": false
   },

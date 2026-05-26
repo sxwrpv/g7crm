@@ -5,7 +5,10 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const APP_CONFIG = {
-  n8nLeadWebhookUrl: 'http://127.0.0.1:5678/webhook/agency-lead-intake',
-  telegramBridgeUrl: 'http://127.0.0.1:8765/send',
-  defaultNiche: 'Plumber',
+  // Set this to your hosted n8n webhook URL after Railway deploy.
+  // While empty, the public lead form posts straight to Supabase lead_submissions.
+  n8nLeadWebhookUrl: '',
+  defaultNiche: 'Home Services',
+  // Emails allowed to sign into the dashboard. Add more as needed.
+  allowedOperators: ['hello@g7systems.xyz'],
 };

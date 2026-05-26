@@ -176,20 +176,122 @@
       </div>
     </section>
 
-    <section class="welcome-cta-panel fade-in visible">
+    <section class="welcome-cta-panel fade-in visible" id="leadFormSection">
       <div class="welcome-cta-copy">
-        <div class="eyebrow">Next step</div>
-        <h3>Keep the outside simple. Keep the work inside G7CRM.</h3>
-        <p>That is the split: welcome page for clarity, dashboard for operations.</p>
+        <div class="eyebrow">Get started</div>
+        <h3>Tell us where leads are slipping. We'll send a same-day reply.</h3>
+        <p>Quick form. We'll be in touch within a few hours during business hours.</p>
       </div>
-      <form class="welcome-cta-form" onsubmit="event.preventDefault(); window.location.href='dashboard.html';">
-        <input type="text" value="Enter working area" readonly />
-        <button type="submit" class="btn btn-primary">Open dashboard</button>
+      <form class="g7-lead-form" id="leadForm" autocomplete="on">
+        <div class="g7-lead-row">
+          <input required name="business_name" type="text" placeholder="Business name (e.g. Murphy Plumbing)" />
+          <input required name="lead_name" type="text" placeholder="Your name" />
+        </div>
+        <div class="g7-lead-row">
+          <input required name="lead_phone" type="tel" placeholder="Phone (+353…)" />
+          <input name="lead_email" type="email" placeholder="Email (optional)" />
+        </div>
+        <div class="g7-lead-row">
+          <select name="service_requested">
+            <option value="">What service do you run?</option>
+            <option>Plumbing</option>
+            <option>Electrical</option>
+            <option>HVAC / Heating</option>
+            <option>Carpentry</option>
+            <option>Painting / Decorating</option>
+            <option>Roofing</option>
+            <option>Gardening / Landscaping</option>
+            <option>Cleaning</option>
+            <option>Handyman</option>
+            <option>Locksmith</option>
+            <option>Appliance Repair</option>
+            <option>Pest Control</option>
+            <option>Other home service</option>
+          </select>
+          <select name="urgency">
+            <option value="normal">How urgent? — Normal</option>
+            <option value="high">High — losing leads now</option>
+            <option value="emergency">Emergency — phone ringing constantly</option>
+            <option value="low">Low — just looking</option>
+          </select>
+        </div>
+        <textarea name="message" rows="3" placeholder="Briefly: how many enquiries do you miss per week? What channels (calls, WhatsApp, forms)?"></textarea>
+        <input type="text" name="company_website" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button type="submit" class="btn btn-primary" id="leadSubmitBtn">Send enquiry</button>
+        <div class="g7-lead-msg" id="leadMsg" role="status" aria-live="polite"></div>
       </form>
     </section>
+
+    <style>
+      .g7-lead-form { display: grid; gap: 12px; max-width: 640px; }
+      .g7-lead-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 540px) { .g7-lead-row { grid-template-columns: 1fr; } }
+      .g7-lead-form input, .g7-lead-form select, .g7-lead-form textarea {
+        padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px;
+        font-size: 15px; font-family: inherit; background: #fff; box-sizing: border-box;
+      }
+      .g7-lead-form button[type="submit"] { margin-top: 4px; }
+      .g7-lead-msg  { font-size: 14px; color: #666; min-height: 18px; margin-top: 6px; }
+      .g7-lead-msg.ok  { color: #2DA162; }
+      .g7-lead-msg.err { color: #c0392b; }
+    </style>
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
 <script src="js/utils.js"></script>
+<script>
+document.getElementById('leadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const btn  = document.getElementById('leadSubmitBtn');
+  const msg  = document.getElementById('leadMsg');
+  msg.className = 'g7-lead-msg';
+
+  const data = Object.fromEntries(new FormData(form).entries());
+  if (data.company_website) { msg.textContent = 'Thanks.'; return; } // honeypot
+
+  btn.disabled = true;
+  msg.textContent = 'Sending…';
+
+  const payload = {
+    business_name: data.business_name,
+    lead_name: data.lead_name,
+    lead_phone: data.lead_phone,
+    lead_email: data.lead_email || null,
+    service_requested: data.service_requested || 'General enquiry',
+    urgency: data.urgency || 'normal',
+    message: data.message || '',
+    source_channel: 'website-form',
+    submission_status: 'new',
+    inquiry_type: data.urgency === 'emergency' ? 'urgent-call' : 'standard',
+    raw_payload: data,
+  };
+
+  try {
+    if (APP_CONFIG.n8nLeadWebhookUrl) {
+      const res = await fetch(APP_CONFIG.n8nLeadWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error('Webhook ' + res.status);
+    } else {
+      const { error } = await db.from('lead_submissions').insert(payload);
+      if (error) throw error;
+    }
+    form.reset();
+    msg.classList.add('ok');
+    msg.textContent = "Got it. We'll be in touch shortly.";
+  } catch (err) {
+    msg.classList.add('err');
+    msg.textContent = 'Could not send. Try again or email hello@g7systems.xyz.';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
 </body>
 </html>
