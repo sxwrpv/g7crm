@@ -183,38 +183,73 @@ Keep it short. No links to social, no signature image, no "best regards". One li
 
 ---
 
-## 6. Starter target list
+## 6. Two tiers of target
 
-These nine Dublin home-services businesses have been loaded into G7CRM as `record_type='lead'`, `source_channel='research'`. See the SQL in [supabase/migrations/20260526_starter_prospects.sql](../supabase/migrations/20260526_starter_prospects.sql).
+A lesson learned the hard way: **searching Google for "best plumbers Dublin" surfaces the businesses that have already invested in being findable online.** Those are NOT your cold targets — they've already paid an agency to look professional.
 
-Numbers verified from each business's public website on 2026-05-26.
+The real cold targets are *invisible to Google search.* You find them on directory sites where listings exist without websites attached.
 
-| # | Business | Trade | Phone | Area | Signal | Priority |
-|---|---|---|---|---|---|---|
-| 1 | Your Handy Man (Tom) | Handyman | 083 315 0617 | D15, D7, D9, D11, D20 | No Facebook/Insta, multi-step form likely loses leads | 🔥 HIGH |
-| 2 | The Home Team (Owen Flynn) | Handyman | 01 685 2574 | Dublin general | No social channels at all, small team | 🔥 HIGH |
-| 3 | KN Electrical (Kane Nolan) | Electrical | 01 451 6880 | Dublin + Kildare | Mon-Fri 8-4 hours = missing all evening/weekend calls | 🔥 HIGH |
-| 4 | MMK Electricians | Electrical | 01 515 9265 | Donabate, Swords, D9 | Basic site, no social mentions, looks like 1-2 person op | 🟠 MED |
-| 5 | Stamford Electrical | Electrical | 083 308 7584 | Dublin/Kildare/Meath | Only Facebook, no Insta — minimal digital | 🟠 MED |
-| 6 | JLK Electrical | Electrical | 01 281 0678 | Dublin & Wicklow | Pinterest+Reddit (weird) but no real socials, M-F 8-5 | 🟠 MED |
-| 7 | The Handyman Dublin (John) | Handyman | 087 280 6299 | Dublin City & County | 1982-old site, M-F 9-9 = weekend gap | 🟠 MED |
-| 8 | ACR Plumbing & Heating | Plumbing/Heating | 01 497 9838 | Dublin South | Family-run 1990, full socials, may be sorted | 🟡 LOW |
-| 9 | DeWAR Gas Service | Heating | 01 514 3344 | Dublin 6 | "30k customers" suggests bigger than ideal | 🟡 LOW |
+### Tier 1 — Cold targets (the real prospects)
 
-**Start with the 3 HIGH-priority targets on Tuesday morning.** They're the smallest operators with the clearest "missing leads" angle.
+Sole traders with **no website at all**, often just a goldenpages.ie listing with a mobile number. They have zero infrastructure to handle leads. Selling them G7's bundle is selling them their first real digital presence.
+
+**18 loaded into G7CRM, mostly handymen.** Filter for `tags @> ARRAY['tier:cold-target']`. SQL: [supabase/migrations/20260526_cold_target_prospects_tier1.sql](../supabase/migrations/20260526_cold_target_prospects_tier1.sql).
+
+**Top 5 to start with (Tuesday morning):**
+
+| # | Business | Trade | Phone | Area |
+|---|---|---|---|---|
+| 1 | **Joe Will Fix It** | Handyman | 087 254 2419 | Dublin 13 |
+| 2 | **David Molloy Dublin Handyman** | Handyman | 087 217 0853 | Dublin |
+| 3 | **Emile** | Handyman | 01 495 0694 | Knocklyon |
+| 4 | **Handyman Dalkey** | Handyman | 086 061 8325 | Dalkey |
+| 5 | **BC Plumbing** | Plumbing | 087 232 4410 | Dublin 15 |
+
+These are named, single-area, mobile-only sole traders. Highest conversion probability.
+
+**Pitch for Tier 1:** *"You're not even online — your customers can't find you on Google. We build the website AND we catch every lead. €490/mo, first month free."*
+
+### Tier 2 — Established (already have a site)
+
+The 9 prospects from the first pass — businesses that **already have websites and basic systems**. These are not great cold targets (they've already solved the visibility problem), but they're callable with a different pitch.
+
+**9 loaded as `tier:established` and demoted to `priority:low`.** Filter for `tags @> ARRAY['tier:established']`. SQL: [supabase/migrations/20260526_starter_prospects.sql](../supabase/migrations/20260526_starter_prospects.sql).
+
+**Pitch for Tier 2:** *"Your site is fine, but your reply time is 30 minutes when it should be 5. We plug that leak. €290/mo, first month free."*
+
+This is the upsell tier — call them after you've got 1-2 paying Tier-1 clients to use as proof.
 
 ---
 
-## 7. How to find more prospects
+## 7. How to find more prospects (corrected methodology)
 
-You'll burn through 9 fast. Here's how to keep the pipeline filled:
+### Where the right prospects actually live
 
-### Manual methodology (free, ~30 min for 20 prospects)
+The web-search "best plumbers Dublin" trick **does not work** — it returns the businesses that ranked top, which means they're competent at digital marketing already. Use these instead:
 
-1. **goldenpages.ie** — search "plumber dublin" / "electrician dublin" — has phone numbers visible without login.
-2. **Google Maps** — search "plumber Dublin 12" (rotate postcodes D1-D24). Open each listing → grab phone, website. ~2 min per prospect.
-3. **bestinireland.com** lists like *"Best Emergency Plumbers in Dublin 2026"* — already curated.
-4. **checkatrade.com** and **rated.co.uk** — UK-focused but covers some Irish trades, has reviews + phones.
+1. **goldenpages.ie** (best source) — many Irish trades list there with just a phone, no website link. Browse `goldenpages.ie/q/business/advanced/where/Dublin/what/Handyman-Services/`, then swap "Handyman-Services" for "Plumbers", "Electricians", etc. **Filter visually for listings with no website icon.** Handyman directory has ~80% no-website listings — goldmine.
+2. **Google Maps with the "no website" filter** — search "plumber Dublin", open the list view, look for listings that don't have a website link. These are typically the smaller operators.
+3. **Facebook Marketplace + Adverts.ie** — sole traders post "plumbing/electrical/handyman services Dublin available" with mobile only. Zero digital infrastructure.
+4. **Van logos on Dublin streets** — literally write down the phone numbers painted on the side of work vans parked outside houses. The smaller they are, the better the target.
+
+### Tooled methodology (€5-50)
+
+- **Outscraper Google Maps** ([outscraper.com](https://outscraper.com)) — €0.001/result, CSV export, includes website (or lack of). Filter the CSV for blank-website rows.
+- **Apify Google Maps Scraper** — €0.50 per 100 results.
+
+### Trades hierarchy (by likelihood of finding no-website prospects)
+
+| Trade | % without website on goldenpages |
+|---|---|
+| **Handyman** | ~80% — best source |
+| **Painting/Decorating** | ~50% |
+| **Cleaning** | ~40% |
+| **Gardening** | ~40% |
+| **Carpentry** | ~30% |
+| **Plumbing** | ~5% — most have websites |
+| **Electrical** | ~5% — RECI/Safe Electric pushes them online |
+
+**Counter-intuitive insight:** handymen are the goldmine because they're unlicensed → smaller → less digital sophistication. Plumbers and electricians need licenses (RGI/RECI), which correlates with running an actual business with a website. Lead with handymen for the first batch of wins.
 
 ### Tooled methodology (€10-50, ~50 prospects in 10 min)
 
