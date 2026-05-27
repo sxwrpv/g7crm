@@ -2390,24 +2390,26 @@ body.home-page {
   border-bottom: 1px solid rgba(31,26,20,0.08);
 }
 .tmpl-p-logo {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Fraunces', 'Times New Roman', serif;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  font-variation-settings: "opsz" 12, "SOFT" 50;
   letter-spacing: -0.005em;
   color: #1F1A14;
   line-height: 1.2;
-  max-width: 60%;
+  max-width: 65%;
 }
 .tmpl-p-logo em {
-  font-family: var(--font-serif);
+  font-family: 'Fraunces', 'Times New Roman', serif;
   font-style: italic;
-  font-weight: 400;
-  font-size: 19px;
+  font-weight: 500;
+  font-variation-settings: "opsz" 120, "SOFT" 100;
+  font-size: 22px;
   color: #C24E1F;
   display: block;
   line-height: 1;
-  margin-bottom: 1px;
-  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+  letter-spacing: -0.015em;
 }
 .tmpl-p-nav {
   font-family: var(--font-mono);
@@ -2475,17 +2477,19 @@ body.home-page {
   margin-bottom: 4px;
 }
 .tmpl-p-title {
-  font-family: var(--font-heading);
-  font-size: 18px;
+  font-family: 'Fraunces', 'Times New Roman', serif;
+  font-size: 22px;
   font-weight: 500;
-  line-height: 1.05;
+  font-variation-settings: "opsz" 120, "SOFT" 70;
+  line-height: 1.02;
   letter-spacing: -0.025em;
   color: #1F1A14;
 }
 .tmpl-p-title em {
-  font-family: var(--font-serif);
+  font-family: 'Fraunces', 'Times New Roman', serif;
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
+  font-variation-settings: "opsz" 120, "SOFT" 100;
   color: #C24E1F;
 }
 .tmpl-p-cta {
