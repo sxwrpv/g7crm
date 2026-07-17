@@ -29,7 +29,7 @@ async function loadStats() {
     const clients = customers.filter(c => c.record_type === 'client').length;
     const hotPipeline = deals.filter(d => !['closed-won', 'closed-lost'].includes(d.stage));
     const pipelineVal = hotPipeline.reduce((s, d) => s + parseFloat(d.value || 0), 0);
-    const recurring = deals.reduce((s, d) => s + parseFloat(d.monthly_revenue || 0), 0);
+    const recurring = deals.filter(d => d.stage !== 'closed-lost').reduce((s, d) => s + parseFloat(d.monthly_revenue || 0), 0);
     const today = new Date().toISOString().slice(0, 10);
     const urgentTasks = tasks.filter(t => t.priority === 'urgent' || (t.due_date && t.due_date <= today)).length;
     const newLeads = leads.filter(l => l.submission_status === 'new').length;

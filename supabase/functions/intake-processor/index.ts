@@ -68,39 +68,67 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ skipped: "already processed", id: lead.id }, 200);
   }
 
-  // 1. Upsert customer (on conflict by email)
+  // 1. Find-or-create customer by email.
+  // Deliberately NOT a blind upsert: a repeat submission from an existing
+  // client must not downgrade record_type back to "lead" or reset
+  // onboarding_status — only refresh contact fields + next action.
   const customerEmail = lead.lead_email || `missing-${Date.now()}-${recordId.slice(0, 8)}@placeholder.local`;
   const nextAction =
       lead.inquiry_type === "booking"     ? "Confirm booking request and lock time."
     : lead.inquiry_type === "urgent-call" ? "Call back immediately."
     :                                       "Review new inbound lead and qualify.";
 
-  const { data: customer, error: custErr } = await supabase
+  const { data: existingCustomer } = await supabase
     .from("customers")
-    .upsert({
-      name: lead.lead_name,
-      company: lead.business_name,
-      email: customerEmail,
-      phone: lead.lead_phone,
-      record_type: "lead",
-      niche: "Home Services",
-      source_channel: lead.source_channel || "website-form",
-      onboarding_status: "not-started",
-      preferred_alert_channel: "email",
-      next_action: nextAction,
-      last_contacted_at: new Date().toISOString(),
-    }, { onConflict: "email" })
-    .select().single();
+    .select("id, phone, company")
+    .eq("email", customerEmail)
+    .maybeSingle();
 
-  if (custErr) console.error("customer upsert failed", custErr);
+  let customer = null;
+  let custErr = null;
+  if (existingCustomer) {
+    ({ data: customer, error: custErr } = await supabase
+      .from("customers")
+      .update({
+        phone: lead.lead_phone || existingCustomer.phone,
+        company: existingCustomer.company || lead.business_name,
+        next_action: nextAction,
+        last_contacted_at: new Date().toISOString(),
+      })
+      .eq("id", existingCustomer.id)
+      .select().single());
+  } else {
+    ({ data: customer, error: custErr } = await supabase
+      .from("customers")
+      .insert({
+        name: lead.lead_name,
+        company: lead.business_name,
+        email: customerEmail,
+        phone: lead.lead_phone,
+        record_type: "lead",
+        niche: "Home Services",
+        source_channel: lead.source_channel || "website-form",
+        onboarding_status: "not-started",
+        preferred_alert_channel: "email",
+        next_action: nextAction,
+        last_contacted_at: new Date().toISOString(),
+      })
+      .select().single());
+  }
+
+  if (custErr) console.error("customer find-or-create failed", custErr);
   const customerId = customer?.id ?? null;
 
-  // 2. Mark submission processed + link customer
-  await supabase.from("lead_submissions").update({
-    customer_id: customerId,
-    submission_status: "processed",
-    processed_at: new Date().toISOString(),
-  }).eq("id", lead.id);
+  // 2. Mark submission processed + link customer.
+  // If the customer step failed, leave the row 'new' so it stays visible
+  // in the dashboard's new-leads counter instead of vanishing silently.
+  if (customerId) {
+    await supabase.from("lead_submissions").update({
+      customer_id: customerId,
+      submission_status: "processed",
+      processed_at: new Date().toISOString(),
+    }).eq("id", lead.id);
+  }
 
   // 3. Create follow-up task
   const priority =
@@ -140,7 +168,7 @@ Deno.serve(async (req: Request) => {
     lead_submission_id: lead.id,
     workflow_name: "intake-processor (edge function)",
     workflow_run_id: `efn_${Date.now()}`,
-    run_status: "success",
+    run_status: customerId ? "success" : "failed",
     summary,
     payload: {
       inquiry_type: lead.inquiry_type,

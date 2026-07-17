@@ -330,6 +330,7 @@ async function saveTask() {
     assigned_to: document.getElementById('tAssignedTo').value.trim() || null,
     description: document.getElementById('tDesc').value.trim() || null,
   };
+  if (payload.status === 'done') payload.completed_at = new Date().toISOString();
   if (!payload.title) {
     toast('Task title is required', 'error');
     return;

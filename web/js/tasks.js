@@ -202,8 +202,11 @@ async function saveTask() {
     priority,
     assigned_to: assignedTo || null,
     description: desc || null,
-    completed_at: status === 'done' ? new Date().toISOString() : null,
   };
+
+  // Preserve the original completion time when re-editing an already-done task.
+  const before = id ? allTasks.find(x => x.id === id) : null;
+  payload.completed_at = status === 'done' ? (before?.completed_at || new Date().toISOString()) : null;
 
   let error;
   if (id) {

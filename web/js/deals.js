@@ -136,9 +136,13 @@ function getNextStage(stage) {
 }
 
 async function moveStage(id, newStage) {
-  const updates = { stage: newStage };
-  if (newStage === 'closed-won') updates.won_at = new Date().toISOString();
-  if (newStage === 'closed-lost') updates.lost_at = new Date().toISOString();
+  // Keep won_at/lost_at consistent with the stage — clear them when a deal
+  // is moved back out of a closed column.
+  const updates = {
+    stage: newStage,
+    won_at: newStage === 'closed-won' ? new Date().toISOString() : null,
+    lost_at: newStage === 'closed-lost' ? new Date().toISOString() : null,
+  };
 
   const { error } = await db.from('deals').update(updates).eq('id', id);
   if (error) {

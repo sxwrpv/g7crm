@@ -10,7 +10,7 @@ async function loadCustomers() {
     .select(`
       id, name, email, phone, company, address, status, notes, created_at,
       record_type, account_stage, niche, website_url, service_area, whatsapp, source_channel,
-      onboarding_status, preferred_alert_channel, alert_destination, next_action
+      onboarding_status, preferred_alert_channel, alert_destination, next_action, client_since
     `)
     .order('created_at', { ascending: false });
 
@@ -158,8 +158,16 @@ async function saveCustomer() {
     preferred_alert_channel: preferredAlertChannel,
     alert_destination: alertDestination || null,
     next_action: nextAction || null,
-    client_since: recordType === 'client' ? new Date().toISOString() : null,
   };
+
+  // client_since: stamp once when the record first becomes a client,
+  // never reset it on later edits, clear it if they stop being a client.
+  const before = id ? allCustomers.find(x => x.id === id) : null;
+  if (recordType === 'client') {
+    payload.client_since = before?.client_since || new Date().toISOString();
+  } else {
+    payload.client_since = null;
+  }
 
   let error;
   if (id) {
