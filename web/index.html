@@ -1,64 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G7 Systems — Lead recovery for Irish home-services trades</title>
-  <meta name="theme-color" content="#0A0A0A" />
-  <meta name="description" content="Stop losing jobs to slow replies. We catch every enquiry, reply in 5 minutes, and book the work — for plumbers, electricians, and home-services trades in Ireland." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body class="home-page">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>G7 Systems — Lead recovery for Irish home-services trades</title>
+<meta name="description" content="Stop losing jobs to slow replies. We catch every missed call, form and WhatsApp, reply in 5 minutes, and book the work — for plumbers, electricians and home-services trades in Dublin." />
+<meta name="theme-color" content="#0d1015" />
+<meta property="og:title" content="G7 Systems — Stop losing jobs to slow replies" />
+<meta property="og:description" content="Missed-call text-back, 5-minute auto-reply and booking for Irish home-services trades. First month free." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://g7systems.xyz/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1015'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='%23ff6a1a' text-anchor='middle'%3EG7%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Archivo:wght@600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Clash Display + General Sans self-hosted (fonts/) — the Fontshare CDN
+     rate-limits anonymous traffic, so we don't depend on it in production. */
+  @font-face{font-family:"Clash Display";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/ClashDisplayRegular.woff") format("woff")}
+  @font-face{font-family:"Clash Display";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/ClashDisplayMedium.woff") format("woff")}
+  @font-face{font-family:"Clash Display";font-weight:600;font-style:normal;font-display:swap;src:url("fonts/ClashDisplaySemibold.woff") format("woff")}
+  @font-face{font-family:"Clash Display";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/ClashDisplayBold.woff") format("woff")}
+  @font-face{font-family:"General Sans";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/GeneralSans-Regular.woff") format("woff")}
+  @font-face{font-family:"General Sans";font-weight:400;font-style:italic;font-display:swap;src:url("fonts/GeneralSans-Italic.woff") format("woff")}
+  @font-face{font-family:"General Sans";font-weight:500;font-style:normal;font-display:swap;src:url("fonts/GeneralSans-Medium.woff") format("woff")}
+  @font-face{font-family:"General Sans";font-weight:600;font-style:normal;font-display:swap;src:url("fonts/GeneralSans-Semibold.woff") format("woff")}
 
-<header class="home-topbar">
-  <a href="index.html" class="home-brand">
-    <span class="home-brand-mark">G7</span>
-    <span class="home-brand-name">G7&nbsp;Systems</span>
-    <span class="home-brand-sub">Lead recovery for Irish home-services trades</span>
-  </a>
-  <nav class="home-topnav">
-    <a href="#how" class="home-topnav-link">How it works</a>
-    <a href="#sites" class="home-topnav-link">Websites</a>
-    <a href="#audit" class="home-topnav-cta">Get a free audit</a>
-  </nav>
+  :root{
+    --white:#ffffff;
+    --paper:#f6f5f1;
+    --ink:#0d1015;
+    --navy:#0d2b4e;
+    --accent:#ff6a1a;
+    --accent-soft:#fff0e6;
+    --navy-soft:#eef3f9;
+    --line:#e7e4dc;
+    --muted:#5b5f66;
+    --green:#1da66a;
+    --r:16px;
+    --r-lg:26px;
+    --maxw:1240px;
+    --pad:clamp(20px,5vw,72px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  @keyframes reveal{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  @supports (animation-timeline: view()){
+    [data-reveal],[data-reveal-stagger]>*{opacity:0;animation:reveal linear both;animation-timeline:view();animation-range:entry 20% entry 80%;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+  }
+  body{
+    font-family:"General Sans",system-ui,sans-serif;
+    background:var(--white);color:var(--ink);
+    -webkit-font-smoothing:antialiased;line-height:1.6;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+  h1,h2,h3{font-family:"Clash Display",sans-serif;font-weight:500;line-height:1.02;letter-spacing:-0.03em}
+  .display{font-size:clamp(40px,7.2vw,104px);font-weight:500;letter-spacing:-0.04em;line-height:0.98}
+  .h2{font-size:clamp(30px,4.6vw,62px);letter-spacing:-0.035em}
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent)}
+  .lead{font-size:clamp(17px,1.7vw,21px);color:var(--muted);max-width:52ch}
+  .hl{color:var(--accent)}
+  a{color:inherit;text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:"General Sans";font-weight:600;font-size:15px;
+    padding:14px 22px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:transform .25s ease,background .25s ease,color .25s ease,border-color .25s ease;white-space:nowrap}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:var(--accent);transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+  .btn .ar{transition:transform .25s ease}
+  .btn:hover .ar{transform:translate(3px,-3px)}
+
+  /* NAV */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .35s ease,box-shadow .35s ease,border-color .35s ease;border-bottom:1px solid transparent}
+  header.nav.solid{background:rgba(255,255,255,.88);backdrop-filter:blur(9px);border-color:var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .brand{display:flex;align-items:baseline;gap:8px;font-family:"Clash Display";font-weight:600;font-size:22px;letter-spacing:-0.02em}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;transform:translateY(-1px)}
+  .brand small{font-family:"General Sans";font-weight:500;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-size:15px;font-weight:500;color:var(--ink);opacity:.78;transition:opacity .2s}
+  .nav-links a:hover{opacity:1}
+  .nav-links a.btn-primary{color:#fff;opacity:1}
+  @media(max-width:880px){.nav-links a:not(.btn){display:none}}
+
+  /* HERO */
+  .hero{padding:140px 0 40px;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,56px);align-items:center}
+  @media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+  .hero h1{margin:18px 0 22px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+  .hero-trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;font-size:14px;color:var(--muted);font-weight:500}
+  .hero-trust .ck{color:var(--green);font-weight:700;margin-right:6px}
+
+  /* Live text-back demo (the product, working) */
+  .demo-card{position:relative;border-radius:var(--r-lg);background:var(--ink);color:#fff;padding:26px;box-shadow:0 40px 90px -40px rgba(13,16,21,.45);overflow:hidden}
+  .demo-card::after{content:"";position:absolute;inset:auto -60px -80px auto;width:240px;height:240px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,106,26,.25),transparent)}
+  .demo-head{display:flex;justify-content:space-between;align-items:center;font-family:"JetBrains Mono",monospace;font-size:12px;color:rgba(255,255,255,.55);margin-bottom:18px}
+  .demo-live{display:flex;align-items:center;gap:7px;color:var(--green);font-weight:500}
+  .demo-live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+  .demo-feed{display:grid;gap:12px;position:relative;z-index:1}
+  .demo-event{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px 16px;opacity:0;animation:demoIn 9s infinite}
+  .demo-event-2{animation-delay:.9s}
+  .demo-event-3{animation-delay:1.8s}
+  @keyframes demoIn{
+    0%{opacity:0;transform:translateY(10px)}
+    8%,88%{opacity:1;transform:none}
+    96%,100%{opacity:0;transform:translateY(-6px)}
+  }
+  .demo-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 auto}
+  .demo-ico-miss{background:rgba(220,61,67,.18);color:#ff8d92}
+  .demo-ico-reply{background:rgba(91,91,214,.22);color:#a9a9ff}
+  .demo-ico-book{background:rgba(29,166,106,.18);color:#4fd39a}
+  .demo-body strong{display:block;font-size:14.5px;font-weight:600;letter-spacing:-0.01em}
+  .demo-body span{font-size:13px;color:rgba(255,255,255,.6)}
+  .demo-t{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:rgba(255,255,255,.4);padding-top:2px}
+  .demo-foot{margin-top:18px;font-family:"JetBrains Mono",monospace;font-size:12px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+  .demo-foot-bar{display:inline-block;width:34px;height:3px;border-radius:2px;background:var(--accent)}
+  .demo-badge{position:absolute;left:18px;bottom:-16px;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);color:var(--ink);
+    padding:12px 16px;border-radius:14px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:0 14px 40px -18px rgba(13,16,21,.35)}
+  .demo-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .demo-wrap{position:relative;padding-bottom:26px}
+
+  /* MARQUEE */
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:64px;padding:18px 0;overflow:hidden;white-space:nowrap}
+  .marquee-track{display:inline-flex;gap:46px;animation:scrollx 30s linear infinite}
+  .marquee span{font-family:"Clash Display";font-weight:500;font-size:20px;letter-spacing:-0.02em;color:var(--ink);opacity:.55;display:inline-flex;align-items:center;gap:46px}
+  .marquee span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.9}
+  @keyframes scrollx{to{transform:translateX(-50%)}}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:40px 0 0}
+  @media(max-width:820px){.stats{grid-template-columns:1fr;gap:8px}}
+  .stat{border-top:2px solid var(--ink);padding:18px 4px 0}
+  .stat-num{font-family:"Clash Display";font-weight:600;font-size:clamp(38px,4.4vw,58px);letter-spacing:-0.03em;line-height:1}
+  .stat-num .unit{color:var(--accent)}
+  .stat-lbl{color:var(--muted);font-size:15px;margin-top:8px;max-width:30ch}
+
+  /* SECTION SHELL */
+  section{padding:clamp(70px,9vw,130px) 0}
+  .sec-head{max-width:760px;margin-bottom:54px}
+  .sec-head .eyebrow{margin-bottom:14px;display:block}
+  .sec-head p{color:var(--muted);font-size:17px;margin-top:14px;max-width:56ch}
+
+  /* LEAKS (cards) */
+  .leaks{background:var(--paper)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px;
+    transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-6px);box-shadow:0 24px 60px -28px rgba(13,16,21,.30);border-color:#d8d4ca}
+  .card .no{font-family:"Clash Display";font-weight:600;font-size:15px;color:var(--accent);letter-spacing:0.05em;display:block;margin-bottom:16px}
+  .card h3{font-size:23px;margin-bottom:9px;letter-spacing:-0.02em}
+  .card p{font-size:15.5px;color:var(--muted)}
+
+  /* HOW (horizontal scroll-snap) */
+  .how .wrap>.sec-head{margin-bottom:22px}
+  .scroll-hint{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:13.5px;font-weight:500;padding:0 var(--pad) 4px;max-width:var(--maxw);margin:0 auto}
+  .scroll-hint .ln{flex:1;height:1px;background:var(--line)}
+  .steps-viewport{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .steps-viewport::-webkit-scrollbar{height:6px}
+  .steps-viewport::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+  .steps-track{display:flex;gap:24px;padding:6px var(--pad) 22px}
+  .step-panel{scroll-snap-align:start;flex:0 0 auto;width:min(80vw,360px);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:40px;min-height:320px;display:flex;flex-direction:column;justify-content:space-between}
+  @media(min-width:769px){.step-panel{width:42vw;max-width:430px}}
+  .step-num{font-family:"Clash Display";font-weight:600;font-size:15px;color:var(--accent);letter-spacing:0.05em}
+  .step-panel h3{font-size:30px;margin:auto 0 12px;letter-spacing:-0.03em}
+  .step-panel p{font-size:16px;color:var(--muted);max-width:42ch}
+  .step-line{height:3px;background:var(--line);border-radius:2px;margin-top:24px;position:relative;overflow:hidden}
+  .step-line i{position:absolute;inset:0;background:var(--accent);border-radius:2px}
+
+  /* DARK INTERLUDE — why G7 */
+  .dark{background:var(--ink);color:#fff}
+  .dark .eyebrow{color:var(--accent)}
+  .dark h2{color:#fff}
+  .dark-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,80px);align-items:center}
+  @media(max-width:900px){.dark-grid{grid-template-columns:1fr;gap:40px}}
+  .vals{display:grid;gap:2px;margin-top:10px}
+  .val{display:flex;gap:18px;padding:22px 0;border-top:1px solid rgba(255,255,255,.14)}
+  .val:last-child{border-bottom:1px solid rgba(255,255,255,.14)}
+  .val .vn{font-family:"Clash Display";font-weight:600;color:var(--accent);font-size:15px;min-width:34px}
+  .val h4{font-family:"Clash Display";font-weight:500;font-size:20px;letter-spacing:-0.02em;margin-bottom:4px}
+  .val p{color:rgba(255,255,255,.66);font-size:15px}
+  .price-card{border:1px solid rgba(255,255,255,.16);border-radius:var(--r-lg);padding:34px;background:rgba(255,255,255,.04)}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:16px 0;border-bottom:1px dashed rgba(255,255,255,.16)}
+  .price-row:last-of-type{border-bottom:0}
+  .price-row .nm{font-family:"Clash Display";font-weight:500;font-size:20px;letter-spacing:-0.02em}
+  .price-row .nm small{display:block;font-family:"General Sans";font-size:13px;color:rgba(255,255,255,.55);font-weight:400;letter-spacing:0;margin-top:2px}
+  .price-row .pr{font-family:"Clash Display";font-weight:600;font-size:22px;color:var(--accent);white-space:nowrap}
+  .price-row .pr small{font-size:13px;color:rgba(255,255,255,.55);font-family:"General Sans";font-weight:400}
+  .price-note{margin-top:18px;font-size:13.5px;color:rgba(255,255,255,.55)}
+
+  /* ============ WEBSITE EXAMPLES ============ */
+  .sites{background:var(--paper)}
+  .tmpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+  @media(max-width:920px){.tmpl-grid{grid-template-columns:1fr}}
+  .tmpl{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
+    transition:transform .35s ease,box-shadow .35s ease;display:flex;flex-direction:column}
+  .tmpl:hover{transform:translateY(-6px);box-shadow:0 30px 70px -30px rgba(13,16,21,.35)}
+  .tmpl-chrome{display:flex;align-items:center;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line);background:#fbfaf7}
+  .tmpl-dots{display:flex;gap:5px}
+  .tmpl-dots i{width:9px;height:9px;border-radius:50%;background:#e3e0d8;display:block}
+  .tmpl-url{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--muted);background:var(--white);border:1px solid var(--line);border-radius:999px;padding:4px 14px}
+  .tmpl-screen{aspect-ratio:16/10.6;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  @media(max-width:640px){
+    .tmpl-screen{aspect-ratio:auto;min-height:250px}
+    .tmpl-screen .s-nav{display:none}
+  }
+  .tmpl-meta{padding:22px 24px 26px}
+  .tmpl-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--navy);background:var(--navy-soft);padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .tmpl-meta h3{font-size:21px;letter-spacing:-0.02em;margin-bottom:6px}
+  .tmpl-meta p{font-size:14.5px;color:var(--muted)}
+
+  /* — A. Electrician: industrial dark, volt-yellow, heavy caps grotesk — */
+  .site-elec{background:#101112;color:#f4f4f2}
+  .site-elec .s-top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .site-elec .s-logo{font-family:"Archivo";font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase}
+  .site-elec .s-logo b{color:#f5d90a}
+  .site-elec .s-nav{display:flex;gap:14px;font-family:"Archivo";font-weight:600;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+  .site-elec .s-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:10px 20px 16px;position:relative}
+  .site-elec .s-kicker{font-family:"JetBrains Mono",monospace;font-size:9px;color:#f5d90a;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:8px}
+  .site-elec .s-title{font-family:"Archivo";font-weight:800;font-size:clamp(26px,3.4vw,38px);line-height:.95;text-transform:uppercase;letter-spacing:-0.01em}
+  .site-elec .s-title span{color:#f5d90a}
+  .site-elec .s-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:8px;max-width:30ch}
+  .site-elec .s-cta{margin-top:12px;display:inline-flex;align-self:flex-start;background:#f5d90a;color:#101112;font-family:"Archivo";font-weight:800;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 14px}
+  .site-elec .s-hazard{position:absolute;right:0;top:0;bottom:0;width:14px;background:repeating-linear-gradient(-45deg,#f5d90a 0 8px,#101112 8px 16px);opacity:.85}
+  .site-elec .s-strip{display:flex;gap:16px;padding:10px 20px;border-top:1px solid rgba(255,255,255,.1);font-family:"JetBrains Mono",monospace;font-size:8.5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:0.08em}
+  .site-elec .s-strip b{color:#f5d90a}
+
+  /* — B. Plumber: clean clinic-white + deep blue, rounded, trusty — */
+  .site-plumb{background:#f4f8fb;color:#0e2a47}
+  .site-plumb .s-top{display:flex;justify-content:space-between;align-items:center;padding:13px 20px;background:#fff;border-bottom:1px solid #e2ebf3}
+  .site-plumb .s-logo{font-weight:600;font-size:14px;letter-spacing:-0.01em;display:flex;align-items:center;gap:7px}
+  .site-plumb .s-logo .drop{width:16px;height:16px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#1273d4;display:inline-block}
+  .site-plumb .s-nav{display:flex;gap:14px;font-size:10px;font-weight:500;color:#5d7a96}
+  .site-plumb .s-pill{background:#1273d4;color:#fff;border-radius:999px;padding:5px 12px;font-size:9.5px;font-weight:600}
+  .site-plumb .s-body{flex:1;display:grid;grid-template-columns:1.2fr .8fr;gap:14px;padding:16px 20px;align-items:center}
+  .site-plumb .s-title{font-family:"General Sans";font-weight:600;font-size:clamp(20px,2.6vw,29px);line-height:1.08;letter-spacing:-0.02em}
+  .site-plumb .s-title span{color:#1273d4}
+  .site-plumb .s-sub{font-size:10.5px;color:#5d7a96;margin-top:7px;max-width:32ch}
+  .site-plumb .s-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .site-plumb .s-badge{background:#fff;border:1px solid #dbe7f1;border-radius:999px;font-size:8.5px;font-weight:600;color:#0e2a47;padding:4px 9px}
+  .site-plumb .s-badge b{color:#1da66a}
+  .site-plumb .s-cta{margin-top:11px;display:inline-flex;background:#0e2a47;color:#fff;border-radius:999px;font-size:10px;font-weight:600;padding:8px 15px;align-self:flex-start}
+  .site-plumb .s-visual{background:linear-gradient(160deg,#1273d4,#0e4a8f);border-radius:16px;height:84%;position:relative;overflow:hidden}
+  .site-plumb .s-visual::after{content:"24/7";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"General Sans";font-weight:600;color:rgba(255,255,255,.92);font-size:clamp(18px,2.4vw,26px);letter-spacing:-0.02em}
+  .site-plumb .s-visual::before{content:"";position:absolute;inset:auto -20px -30px auto;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.14)}
+
+  /* — C. Roofing: earthy editorial serif, slate + terracotta — */
+  .site-roof{background:#efe9e1;color:#2b2620}
+  .site-roof .s-top{display:flex;justify-content:space-between;align-items:baseline;padding:14px 20px;border-bottom:1px solid #ddd3c5}
+  .site-roof .s-logo{font-family:"Fraunces",serif;font-weight:600;font-size:15px;letter-spacing:0}
+  .site-roof .s-nav{display:flex;gap:14px;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:#8a7f6f}
+  .site-roof .s-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 20px;position:relative}
+  .site-roof .s-est{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#b2543a;margin-bottom:8px}
+  .site-roof .s-title{font-family:"Fraunces",serif;font-weight:400;font-size:clamp(24px,3.2vw,36px);line-height:1.02;letter-spacing:-0.01em}
+  .site-roof .s-title i{font-style:italic;color:#b2543a}
+  .site-roof .s-sub{font-size:10.5px;color:#6f6659;margin-top:8px;max-width:34ch}
+  .site-roof .s-cta{margin-top:12px;align-self:flex-start;border:1px solid #2b2620;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 16px}
+  .site-roof .s-roofline{position:absolute;right:14px;bottom:0;width:44%;height:58%;pointer-events:none}
+  .site-roof .s-roofline svg{width:100%;height:100%}
+  .site-roof .s-foot{display:flex;justify-content:space-between;padding:10px 20px;border-top:1px solid #ddd3c5;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:#8a7f6f}
+
+  /* — D. Removals: Sheremet-style paper + navy + orange, pill CTAs — */
+  .site-move{background:#fdfcf9;color:#0d1015}
+  .site-move .s-top{display:flex;justify-content:space-between;align-items:center;padding:13px 20px;border-bottom:1px solid #ece9e1}
+  .site-move .s-logo{font-family:"Clash Display";font-weight:600;font-size:14px;display:flex;align-items:baseline;gap:5px}
+  .site-move .s-logo .dot{width:6px;height:6px;border-radius:50%;background:#ff6a1a}
+  .site-move .s-nav{display:flex;gap:13px;font-size:10px;font-weight:500;color:#8a8d93}
+  .site-move .s-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 20px;position:relative}
+  .site-move .s-kicker{font-size:9px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#ff6a1a;margin-bottom:7px}
+  .site-move .s-title{font-family:"Clash Display";font-weight:500;font-size:clamp(24px,3.2vw,35px);line-height:1;letter-spacing:-0.03em}
+  .site-move .s-sub{font-size:10.5px;color:#5b5f66;margin-top:8px;max-width:32ch}
+  .site-move .s-cta-row{display:flex;gap:7px;margin-top:12px}
+  .site-move .s-cta{background:#0d1015;color:#fff;border-radius:999px;font-size:10px;font-weight:600;padding:8px 15px}
+  .site-move .s-cta.ghost{background:transparent;color:#0d1015;border:1px solid #e2ded4}
+  .site-move .s-van{position:absolute;right:16px;bottom:12px;width:38%;max-width:150px;opacity:.95}
+  .site-move .s-ticker{border-top:1px solid #ece9e1;padding:9px 20px;font-family:"Clash Display";font-weight:500;font-size:10px;color:#8a8d93;display:flex;gap:14px;white-space:nowrap;overflow:hidden}
+  .site-move .s-ticker b{color:#0d1015;font-weight:500}
+
+  .sites-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:40px}
+  .sites-cta-note{font-size:14px;color:var(--muted)}
+
+  /* FORM / CONTACT */
+  .contact-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(30px,5vw,70px);align-items:start}
+  @media(max-width:920px){.contact-grid{grid-template-columns:1fr}}
+  .checks{list-style:none;margin-top:24px;display:grid;gap:12px}
+  .checks li{display:flex;gap:12px;font-size:16px;color:var(--ink)}
+  .checks .ck{color:var(--green);font-weight:700}
+  .form-card{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(22px,3vw,36px);box-shadow:0 30px 80px -40px rgba(13,16,21,.25)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  @media(max-width:560px){.form-row{grid-template-columns:1fr}}
+  .form-card input,.form-card select,.form-card textarea{
+    width:100%;font-family:"General Sans";font-size:15px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:13px 15px;outline:none;
+    transition:border-color .2s ease,background .2s ease;appearance:none}
+  .form-card textarea{resize:vertical;margin-bottom:12px}
+  .form-card input:focus,.form-card select:focus,.form-card textarea:focus{border-color:var(--accent);background:#fff}
+  .form-card ::placeholder{color:#9a9da3}
+  .btn-block{width:100%;justify-content:center;font-size:16px;padding:16px 22px}
+  .form-msg{min-height:22px;font-size:14px;margin-top:10px;color:var(--muted)}
+  .form-msg.ok{color:var(--green);font-weight:500}
+  .form-msg.err{color:#c0392b;font-weight:500}
+  .form-foot{font-size:13px;color:var(--muted);margin-top:8px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:46px 0 60px}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:14px}
+
+  @media (prefers-reduced-motion: reduce){
+    [data-reveal],[data-reveal-stagger]>*{opacity:1!important;transform:none!important;animation:none!important}
+    .marquee-track{animation:none}
+    .demo-event{opacity:1;animation:none}
+    .demo-live-dot{animation:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">G7<span class="dot"></span><small>Systems</small></a>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#sites">Website examples</a>
+      <a href="#why">Why G7</a>
+      <a class="btn btn-primary" href="#audit" style="padding:11px 18px">Get a free audit</a>
+    </nav>
+  </div>
 </header>
 
-<main class="home-main">
+<main id="top">
 
-  <!-- Hero -->
-  <section class="home-hero">
-    <div class="home-hero-bg" aria-hidden="true"></div>
-    <div class="home-hero-inner">
-      <div class="home-hero-copy">
-        <div class="home-hero-pill">
-          <span class="home-hero-dot"></span> First month free · 2 Dublin slots this month
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow" data-reveal>Lead recovery · Home services · Dublin</span>
+        <h1 class="display" data-reveal>Stop losing jobs to <span class="hl">slow replies</span>.</h1>
+        <p class="lead" data-reveal>Every missed call, late DM and forgotten follow-up is a job your competitor takes. We catch the lead, reply within five minutes, and book the work — so the diary stays full and you stay on the tools.</p>
+        <div class="hero-cta" data-reveal>
+          <a class="btn btn-primary" href="#audit">Get a free 15-min audit <span class="ar">↗</span></a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
         </div>
-        <h1 class="home-hero-title">
-          Stop losing jobs<br>to <span class="home-hl">slow replies</span>.
-        </h1>
-        <p class="home-hero-text">
-          Every missed call, late DM, and forgotten follow-up is a job your competitor takes. We catch the lead, reply within five minutes, and book the work — so the diary stays full and you stay on the tools.
-        </p>
-        <div class="home-hero-cta">
-          <a href="#audit" class="home-btn home-btn-primary">Get a free 15-min audit <span class="home-btn-arrow">→</span></a>
-          <a href="#how" class="home-btn home-btn-ghost">See how it works</a>
-        </div>
-        <div class="home-trust-row">
-          <span><span class="home-trust-check">✓</span> 5-min reply, 24/7</span>
-          <span><span class="home-trust-check">✓</span> No-show reminders</span>
-          <span><span class="home-trust-check">✓</span> Cancel anytime</span>
+        <div class="hero-trust" data-reveal>
+          <span><span class="ck">✓</span>5-min reply, 24/7</span>
+          <span><span class="ck">✓</span>No-show reminders</span>
+          <span><span class="ck">✓</span>First month free</span>
         </div>
       </div>
 
-      <!-- Looping text-back demo (shows the product working) -->
-      <div class="home-hero-demo" aria-hidden="true">
-        <div class="demo-phone">
+      <div class="demo-wrap" data-reveal>
+        <div class="demo-card" aria-hidden="true">
           <div class="demo-head">
-            <span class="demo-head-brand">G7CRM · live feed</span>
-            <span class="demo-live"><span class="demo-live-dot"></span> online</span>
+            <span>G7CRM · live feed</span>
+            <span class="demo-live"><span class="demo-live-dot"></span>online</span>
           </div>
           <div class="demo-feed">
             <div class="demo-event demo-event-1">
@@ -86,244 +384,306 @@
               <div class="demo-t">2m</div>
             </div>
           </div>
-          <div class="demo-foot"><span class="demo-foot-bar"></span> Lead saved · 0 leads lost today</div>
+          <div class="demo-foot"><span class="demo-foot-bar"></span>Lead saved · 0 leads lost today</div>
         </div>
+        <div class="demo-badge"><span class="dot"></span>2 Dublin slots open this month</div>
       </div>
     </div>
 
-    <div class="home-stats">
-      <div class="home-stat">
-        <div class="home-stat-num" data-count-to="30" data-prefix="~"><span class="home-stat-num-val">~30</span><span class="home-stat-unit">%</span></div>
-        <div class="home-stat-lbl">of calls go unanswered when you're on a job</div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Plumbing</span><span>Electrical</span><span>Heating &amp; HVAC</span><span>Roofing</span><span>Removals</span><span>Carpentry</span><span>Painting</span><span>Locksmiths</span><span>Appliance repair</span><span>Landscaping</span>
+        <span>Plumbing</span><span>Electrical</span><span>Heating &amp; HVAC</span><span>Roofing</span><span>Removals</span><span>Carpentry</span><span>Painting</span><span>Locksmiths</span><span>Appliance repair</span><span>Landscaping</span>
       </div>
-      <div class="home-stat">
-        <div class="home-stat-num" data-count-to="400" data-prefix="€"><span class="home-stat-num-val">€400</span><span class="home-stat-unit">+</span></div>
-        <div class="home-stat-lbl">average value of one missed job in Dublin</div>
+    </div>
+
+    <div class="wrap stats" data-reveal-stagger>
+      <div class="stat">
+        <div class="stat-num" data-count-to="30" data-prefix="~"><span class="stat-num-val">~30</span><span class="unit">%</span></div>
+        <div class="stat-lbl">of calls go unanswered while you're on a job</div>
       </div>
-      <div class="home-stat">
-        <div class="home-stat-num" data-count-to="5"><span class="home-stat-num-val">5</span><span class="home-stat-unit">&nbsp;min</span></div>
-        <div class="home-stat-lbl">our reply SLA — day, night, weekend</div>
+      <div class="stat">
+        <div class="stat-num" data-count-to="400" data-prefix="€"><span class="stat-num-val">€400</span><span class="unit">+</span></div>
+        <div class="stat-lbl">average value of one missed job in Dublin</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-count-to="5"><span class="stat-num-val">5</span><span class="unit">&nbsp;min</span></div>
+        <div class="stat-lbl">our reply SLA — day, night, weekend</div>
       </div>
     </div>
   </section>
 
-  <!-- Trades marquee -->
-  <section class="home-marquee" aria-hidden="true">
-    <div class="home-marquee-track">
-      <span>Plumbing</span><span>·</span>
-      <span>Electrical</span><span>·</span>
-      <span>HVAC / Heating</span><span>·</span>
-      <span>Carpentry</span><span>·</span>
-      <span>Painting</span><span>·</span>
-      <span>Roofing</span><span>·</span>
-      <span>Locksmith</span><span>·</span>
-      <span>Cleaning</span><span>·</span>
-      <span>Appliance Repair</span><span>·</span>
-      <span>Pest Control</span><span>·</span>
-      <span>Gardening</span><span>·</span>
-      <span>Handyman</span><span>·</span>
-      <!-- duplicate for seamless loop -->
-      <span>Plumbing</span><span>·</span>
-      <span>Electrical</span><span>·</span>
-      <span>HVAC / Heating</span><span>·</span>
-      <span>Carpentry</span><span>·</span>
-      <span>Painting</span><span>·</span>
-      <span>Roofing</span><span>·</span>
-      <span>Locksmith</span><span>·</span>
-      <span>Cleaning</span><span>·</span>
-      <span>Appliance Repair</span><span>·</span>
-      <span>Pest Control</span><span>·</span>
-      <span>Gardening</span><span>·</span>
-      <span>Handyman</span><span>·</span>
-    </div>
-  </section>
-
-  <!-- The leak -->
-  <section class="home-section home-section-leak">
-    <div class="home-section-head">
-      <div class="home-eyebrow">Where the money goes</div>
-      <h2>Four leaks. One system to <span class="home-hl-soft">close them</span>.</h2>
-      <p>You don't need more marketing. You need to stop losing the leads you already have.</p>
-    </div>
-    <ol class="home-leak-list">
-      <li>
-        <span class="home-leak-no">01</span>
-        <div>
+  <!-- LEAKS -->
+  <section class="leaks">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow">Where the money goes</span>
+        <h2 class="h2">Four leaks. One system to close them.</h2>
+        <p>You don't need more marketing. You need to stop losing the leads you already have.</p>
+      </div>
+      <div class="cards" data-reveal-stagger>
+        <article class="card">
+          <span class="no">01</span>
           <h3>Missed calls while you're on the job</h3>
           <p>Phone rings, you can't pick up. They ring the next plumber. We text them back in seconds and hold the lead.</p>
-        </div>
-      </li>
-      <li>
-        <span class="home-leak-no">02</span>
-        <div>
+        </article>
+        <article class="card">
+          <span class="no">02</span>
           <h3>Slow replies on forms, DMs, WhatsApp</h3>
           <p>Most Irish trades take 4+ hours to reply. By then the lead is cold. We reply in 5 minutes, automatically.</p>
-        </div>
-      </li>
-      <li>
-        <span class="home-leak-no">03</span>
-        <div>
+        </article>
+        <article class="card">
+          <span class="no">03</span>
           <h3>No-shows and missed appointments</h3>
           <p>You quoted them, you booked them, then they ghost. Confirmations + reminders cut no-shows by half.</p>
-        </div>
-      </li>
-      <li>
-        <span class="home-leak-no">04</span>
-        <div>
+        </article>
+        <article class="card">
+          <span class="no">04</span>
           <h3>Old customers who never come back</h3>
           <p>The people who already paid you once are the cheapest to win again. We send the right nudge at the right time.</p>
-        </div>
-      </li>
-    </ol>
-  </section>
-
-  <!-- How it works -->
-  <section class="home-section home-section-how" id="how">
-    <div class="home-section-head">
-      <div class="home-eyebrow">The system</div>
-      <h2>Three pieces. Live in <span class="home-hl-soft">48 hours</span>.</h2>
-      <p>No app to download. No new login for you. We plug into your phone, your forms, and your inbox.</p>
-    </div>
-    <div class="home-steps">
-      <article class="home-step">
-        <div class="home-step-tag">A · Catch</div>
-        <h3>Every enquiry, every channel.</h3>
-        <p>Missed call, Facebook DM, Instagram, website form, WhatsApp. All land in one place. None of them sit unanswered.</p>
-      </article>
-      <article class="home-step">
-        <div class="home-step-tag">B · Reply</div>
-        <h3>Personal-sounding response in 5 minutes.</h3>
-        <p>Auto-reply with the right info for the right service. Sounds like you wrote it. Asks the right qualifying question.</p>
-      </article>
-      <article class="home-step">
-        <div class="home-step-tag">C · Book</div>
-        <h3>Into the diary, with reminders.</h3>
-        <p>From "interested" to "confirmed booking" without you typing. 24-hour reminder cuts no-shows by half.</p>
-      </article>
+        </article>
+      </div>
     </div>
   </section>
 
-  <!-- We also build the site itself -->
-  <section class="home-section home-section-sites" id="sites">
-    <div class="home-section-head">
-      <div class="home-eyebrow">Need a new website too?</div>
-      <h2>We <span class="home-hl-soft">build the site</span> that catches the leads.</h2>
-      <p>Most home-services sites are a 2014 Wix that ranks nowhere and converts worse. We rebuild yours, fast, in one of three directions — or match a look you already have.</p>
+  <!-- HOW -->
+  <section id="how" class="how">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow">The system</span>
+        <h2 class="h2">Three pieces. Live in 48 hours.</h2>
+        <p>No app to download. No new login for you. We plug into your phone, your forms and your inbox — then we run it.</p>
+      </div>
     </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Scroll across</span><span class="ln"></span><span>→</span></div>
+    <div class="steps-viewport">
+      <div class="steps-track">
+        <div class="step-panel">
+          <span class="step-num">01 — Catch</span>
+          <div><h3>Every enquiry, every channel.</h3><p>Missed call, Facebook DM, Instagram, website form, WhatsApp. All land in one place. None sit unanswered.</p></div>
+          <div class="step-line"><i style="width:33%"></i></div>
+        </div>
+        <div class="step-panel">
+          <span class="step-num">02 — Reply</span>
+          <div><h3>Personal-sounding response in 5 minutes.</h3><p>Auto-reply with the right info for the right service. Sounds like you wrote it. Asks the right qualifying question.</p></div>
+          <div class="step-line"><i style="width:66%"></i></div>
+        </div>
+        <div class="step-panel">
+          <span class="step-num">03 — Book</span>
+          <div><h3>Into the diary, with reminders.</h3><p>From "interested" to "confirmed booking" without you typing. The 24-hour reminder cuts no-shows by half.</p></div>
+          <div class="step-line"><i style="width:100%"></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <div class="home-templates">
+  <!-- DARK — WHY G7 + PACKAGES -->
+  <section id="why" class="dark">
+    <div class="wrap dark-grid">
+      <div>
+        <span class="eyebrow" data-reveal>Why G7 Systems</span>
+        <h2 class="h2" data-reveal style="margin:14px 0 18px">We run it. You stay on the tools.</h2>
+        <p class="lead" data-reveal style="color:rgba(255,255,255,.7)">An agency, not another app. You don't log into anything — the system works in the background and the jobs land in your diary.</p>
+        <div class="vals" data-reveal-stagger>
+          <div class="val"><span class="vn">01</span><div><h4>Live in 48 hours</h4><p>Lead capture and 5-minute auto-reply running two days after we shake hands.</p></div></div>
+          <div class="val"><span class="vn">02</span><div><h4>Dublin-first</h4><p>Built for Irish trades — Irish numbers, Irish hours, WhatsApp-friendly.</p></div></div>
+          <div class="val"><span class="vn">03</span><div><h4>No contracts</h4><p>First month free, cancel anytime. If it doesn't pay for itself, don't keep it.</p></div></div>
+          <div class="val"><span class="vn">04</span><div><h4>One number to call</h4><p>The person who set it up is the person who answers when you ring.</p></div></div>
+        </div>
+      </div>
+      <div class="price-card" data-reveal>
+        <span class="eyebrow">Packages</span>
+        <div style="margin-top:10px">
+          <div class="price-row">
+            <span class="nm">Starter<small>Lead capture + 5-min reply + CRM</small></span>
+            <span class="pr">€290<small>/mo</small></span>
+          </div>
+          <div class="price-row">
+            <span class="nm">Standard ⭐<small>Starter + we rebuild your website</small></span>
+            <span class="pr">€490<small>/mo</small></span>
+          </div>
+          <div class="price-row">
+            <span class="nm">Growth<small>Standard + Google Ads + GBP</small></span>
+            <span class="pr">€890<small>/mo</small></span>
+          </div>
+        </div>
+        <p class="price-note">Every tier: first month free · no setup fee talk until you've seen it work · cancel anytime.</p>
+      </div>
+    </div>
+  </section>
 
-      <!-- Template 1 — Minimal -->
-      <article class="home-template">
-        <div class="home-template-frame">
-          <div class="home-template-dots"><span></span><span></span><span></span></div>
-          <div class="home-template-url">lynch-plumbing.ie</div>
-        </div>
-        <div class="home-template-screen tmpl-pl tmpl-a">
-          <div class="tmpl-pl-top">
-            <div class="tmpl-pl-brand">Lynch</div>
-            <div class="tmpl-pl-nav"><span>Services</span><span>Book</span></div>
-          </div>
-          <div class="tmpl-a-body">
-            <div class="tmpl-a-eyebrow">Plumbing · Dublin · 24/7</div>
-            <div class="tmpl-a-title">Plumbing,<br>sorted.</div>
-            <div class="tmpl-a-sub">Leaks, burst pipes, boilers. One call and we're on the way.</div>
-            <div class="tmpl-pl-pill">Book a callout →</div>
-          </div>
-          <div class="tmpl-a-photo" aria-hidden="true"></div>
-        </div>
-        <div class="home-template-meta">
-          <div class="home-template-tag">Direction A · Minimal</div>
-          <div class="home-template-desc">Stark, premium, lots of black space. For trades that want to look high-end — plumbing, electrical, renovations, bathrooms.</div>
-        </div>
-      </article>
+  <!-- WEBSITE EXAMPLES -->
+  <section id="sites" class="sites">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow">Website examples</span>
+        <h2 class="h2">We build the site that catches the leads.</h2>
+        <p>Most home-services sites are a 2014 Wix that ranks nowhere and converts worse. We design yours around your trade — four different directions, four different looks. Every one wired straight into the 5-minute reply system.</p>
+      </div>
 
-      <!-- Template 2 — Full-bleed photography -->
-      <article class="home-template">
-        <div class="home-template-frame">
-          <div class="home-template-dots"><span></span><span></span><span></span></div>
-          <div class="home-template-url">doyle-painting.ie</div>
-        </div>
-        <div class="home-template-screen tmpl-pl tmpl-b">
-          <div class="tmpl-pl-top">
-            <div class="tmpl-pl-brand">Doyle</div>
-            <div class="tmpl-pl-nav"><span>Work</span><span>Quote</span></div>
-          </div>
-          <div class="tmpl-b-body">
-            <div class="tmpl-b-tag">Interiors · Exteriors · Heritage</div>
-            <div class="tmpl-b-title">Colour,<br>done right.</div>
-            <div class="tmpl-pl-pill tmpl-pl-pill-ghost">View work →</div>
-          </div>
-        </div>
-        <div class="home-template-meta">
-          <div class="home-template-tag">Direction B · Photography</div>
-          <div class="home-template-desc">The work fills the screen, full-bleed. For visual trades where the finished job is the pitch — painters, landscapers, tilers, kitchen fitters.</div>
-        </div>
-      </article>
+      <div class="tmpl-grid" data-reveal-stagger>
 
-      <!-- Template 3 — Split -->
-      <article class="home-template">
-        <div class="home-template-frame">
-          <div class="home-template-dots"><span></span><span></span><span></span></div>
-          <div class="home-template-url">keane-joinery.ie</div>
-        </div>
-        <div class="home-template-screen tmpl-pl tmpl-c">
-          <div class="tmpl-c-left">
-            <div class="tmpl-c-brand">Keane &amp; Sons</div>
-            <div>
-              <div class="tmpl-c-title">Made<br>to last.</div>
-              <div class="tmpl-c-sub">Bespoke joinery &amp; kitchens. Wicklow + South Dublin.</div>
-              <div class="tmpl-pl-pill">Plan a project →</div>
+        <!-- A · Electrician -->
+        <article class="tmpl">
+          <div class="tmpl-chrome"><div class="tmpl-dots"><i></i><i></i><i></i></div><span class="tmpl-url">osheaelectrical.ie</span></div>
+          <div class="tmpl-screen site-elec">
+            <div class="s-top">
+              <span class="s-logo">O'SHEA <b>ELECTRIC</b></span>
+              <span class="s-nav"><span>Services</span><span>Safety certs</span><span>Call-out</span></span>
+            </div>
+            <div class="s-body">
+              <div class="s-hazard"></div>
+              <div class="s-kicker">RECI registered · Dublin &amp; Kildare</div>
+              <div class="s-title">Power,<br><span>sorted safe.</span></div>
+              <div class="s-sub">Rewiring, fuse boards, EV chargers, emergency call-outs. Certified and insured.</div>
+              <span class="s-cta">Book an electrician →</span>
+            </div>
+            <div class="s-strip"><span><b>24/7</b> emergency</span><span><b>RECI</b> certified</span><span><b>5★</b> 120+ reviews</span></div>
+          </div>
+          <div class="tmpl-meta">
+            <span class="tmpl-tag">Electrician · Industrial</span>
+            <h3>Bold, high-voltage, safety-first</h3>
+            <p>Heavy caps, hazard-stripe accents and cert badges front and centre — for sparks who want to look serious and certified.</p>
+          </div>
+        </article>
+
+        <!-- B · Plumber -->
+        <article class="tmpl">
+          <div class="tmpl-chrome"><div class="tmpl-dots"><i></i><i></i><i></i></div><span class="tmpl-url">lynchplumbing.ie</span></div>
+          <div class="tmpl-screen site-plumb">
+            <div class="s-top">
+              <span class="s-logo"><span class="drop"></span>Lynch Plumbing</span>
+              <span class="s-nav"><span>Services</span><span>Pricing</span><span class="s-pill">Book now</span></span>
+            </div>
+            <div class="s-body">
+              <div>
+                <div class="s-title">Leaks fixed <span>today</span>,<br>not next week.</div>
+                <div class="s-sub">Burst pipes, boilers, bathrooms. Upfront pricing before we start.</div>
+                <div class="s-badges">
+                  <span class="s-badge"><b>✓</b> Fully insured</span>
+                  <span class="s-badge"><b>✓</b> Same-day slots</span>
+                  <span class="s-badge"><b>✓</b> Fixed quotes</span>
+                </div>
+                <span class="s-cta">Get a callout →</span>
+              </div>
+              <div class="s-visual"></div>
             </div>
           </div>
-          <div class="tmpl-c-right" aria-hidden="true"></div>
-        </div>
-        <div class="home-template-meta">
-          <div class="home-template-tag">Direction C · Split</div>
-          <div class="home-template-desc">Bold statement beside the craft. For specialty / multi-generational trades — carpentry, kitchens, restoration — where the detail is the pitch.</div>
-        </div>
-      </article>
+          <div class="tmpl-meta">
+            <span class="tmpl-tag">Plumber · Clean &amp; trusty</span>
+            <h3>Clear, calm, book-in-two-taps</h3>
+            <p>Soft blues, rounded corners, trust badges and one obvious button — built to convert a stressed homeowner with a leak.</p>
+          </div>
+        </article>
 
-    </div>
+        <!-- C · Roofing -->
+        <article class="tmpl">
+          <div class="tmpl-chrome"><div class="tmpl-dots"><i></i><i></i><i></i></div><span class="tmpl-url">byrneroofing.ie</span></div>
+          <div class="tmpl-screen site-roof">
+            <div class="s-top">
+              <span class="s-logo">Byrne &amp; Sons Roofing</span>
+              <span class="s-nav"><span>Work</span><span>Repairs</span><span>Survey</span></span>
+            </div>
+            <div class="s-body">
+              <div class="s-est">Est. 1987 · Three generations</div>
+              <div class="s-title">A roof that<br><i>outlives the mortgage.</i></div>
+              <div class="s-sub">Slate, tile and flat roofing — repairs, re-roofs and storm damage across Dublin.</div>
+              <span class="s-cta">Request a survey</span>
+              <div class="s-roofline" aria-hidden="true">
+                <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 118 L100 30 L190 118" stroke="#b2543a" stroke-width="5" stroke-linecap="round"/>
+                  <path d="M40 118 L100 60 L160 118" stroke="#2b2620" stroke-width="3.5" stroke-linecap="round" opacity=".65"/>
+                  <rect x="128" y="44" width="12" height="26" fill="#2b2620" opacity=".8"/>
+                </svg>
+              </div>
+            </div>
+            <div class="s-foot"><span>Free surveys</span><span>Fully insured</span><span>10-yr guarantee</span></div>
+          </div>
+          <div class="tmpl-meta">
+            <span class="tmpl-tag">Roofing · Editorial heritage</span>
+            <h3>Earthy, established, built to last</h3>
+            <p>Warm serif headlines and craft detailing that says "third generation, still on the ladder" — for roofers selling longevity.</p>
+          </div>
+        </article>
 
-    <div class="home-sites-cta">
-      <a href="#audit" class="home-btn home-btn-primary">Get a site + lead audit <span class="home-btn-arrow">→</span></a>
-      <span class="home-sites-cta-note">First month free · live in 7-14 days · cancel anytime after</span>
+        <!-- D · Removals / small transport -->
+        <article class="tmpl">
+          <div class="tmpl-chrome"><div class="tmpl-dots"><i></i><i></i><i></i></div><span class="tmpl-url">shiftremovals.ie</span></div>
+          <div class="tmpl-screen site-move">
+            <div class="s-top">
+              <span class="s-logo">Shift<span class="dot"></span><span style="font-family:'General Sans';font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#8a8d93">Removals</span></span>
+              <span class="s-nav"><span>Moves</span><span>Deliveries</span><span>Quote</span></span>
+            </div>
+            <div class="s-body">
+              <div class="s-kicker">Moves &amp; deliveries · Dublin · Nationwide</div>
+              <div class="s-title">From A to B,<br>handled with care.</div>
+              <div class="s-sub">Apartment moves, furniture &amp; appliance delivery, man-with-a-van jobs — packed, strapped, delivered.</div>
+              <div class="s-cta-row">
+                <span class="s-cta">Get a quote →</span>
+                <span class="s-cta ghost">Price guide</span>
+              </div>
+              <div class="s-van" aria-hidden="true">
+                <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="12" width="92" height="40" rx="6" fill="#0d2b4e"/>
+                  <path d="M96 22h28l16 16v14H96V22z" fill="#ff6a1a"/>
+                  <rect x="102" y="27" width="18" height="12" rx="2" fill="#fdfcf9"/>
+                  <circle cx="34" cy="56" r="9" fill="#0d1015"/><circle cx="34" cy="56" r="4" fill="#fdfcf9"/>
+                  <circle cx="122" cy="56" r="9" fill="#0d1015"/><circle cx="122" cy="56" r="4" fill="#fdfcf9"/>
+                  <text x="14" y="38" font-family="Arial,sans-serif" font-weight="700" font-size="13" fill="#fdfcf9">SHIFT</text>
+                </svg>
+              </div>
+            </div>
+            <div class="s-ticker"><b>House moves</b><span>·</span><b>Sofa &amp; appliance delivery</b><span>·</span><b>Office moves</b><span>·</span><b>Storage runs</b></div>
+          </div>
+          <div class="tmpl-meta">
+            <span class="tmpl-tag">Removals · Friendly modern</span>
+            <h3>Warm, quick-quote, on the move</h3>
+            <p>Paper tones, pill buttons and a van you can almost hear reversing — for small moving and delivery firms that live on speed.</p>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="sites-cta" data-reveal>
+        <a class="btn btn-primary" href="#audit">Get a site + lead audit <span class="ar">↗</span></a>
+        <span class="sites-cta-note">First month free · live in 7–14 days · cancel anytime after</span>
+      </div>
     </div>
   </section>
 
-  <!-- Form -->
-  <section class="home-section home-section-form" id="audit">
-    <div class="home-form-grid">
-      <div class="home-form-copy">
-        <div class="home-eyebrow home-eyebrow-on-dark">Free audit</div>
-        <h2>We'll show you where the <span class="home-hl">money's leaking</span>.</h2>
-        <p>15 minutes. We look at your missed-call rate, your reply times, and your booking flow. You get a 1-page action list. No pitch unless you ask for one.</p>
-        <ul class="home-form-checks">
-          <li><span class="home-check">✓</span> Honest read on what's costing you most</li>
-          <li><span class="home-check">✓</span> Dublin-first — we know the local context</li>
-          <li><span class="home-check">✓</span> Quote on day 2 if you want us to fix it</li>
+  <!-- AUDIT FORM -->
+  <section id="audit">
+    <div class="wrap contact-grid">
+      <div data-reveal>
+        <span class="eyebrow">Free audit</span>
+        <h2 class="h2" style="margin:14px 0 16px">We'll show you where the <span class="hl">money's leaking</span>.</h2>
+        <p class="lead">15 minutes. We look at your missed-call rate, your reply times and your booking flow. You get a one-page action list. No pitch unless you ask for one.</p>
+        <ul class="checks">
+          <li><span class="ck">✓</span>Honest read on what's costing you most</li>
+          <li><span class="ck">✓</span>Dublin-first — we know the local context</li>
+          <li><span class="ck">✓</span>Quote on day 2 if you want us to fix it</li>
         </ul>
       </div>
 
-      <form class="home-form" id="leadForm" autocomplete="on">
-        <div class="home-form-row">
+      <form class="form-card" id="leadForm" autocomplete="on" data-reveal>
+        <div class="form-row">
           <input required name="business_name" type="text" placeholder="Business name (e.g. Murphy Plumbing)" />
           <input required name="lead_name" type="text" placeholder="Your name" />
         </div>
-        <div class="home-form-row">
+        <div class="form-row">
           <input required name="lead_phone" type="tel" placeholder="Phone (+353…)" />
           <input name="lead_email" type="email" placeholder="Email (optional)" />
         </div>
-        <div class="home-form-row">
+        <div class="form-row">
           <select name="service_requested">
             <option value="">What service do you run?</option>
             <option>Plumbing</option>
             <option>Electrical</option>
             <option>HVAC / Heating</option>
+            <option>Roofing</option>
+            <option>Removals / Transport</option>
             <option>Carpentry</option>
             <option>Painting / Decorating</option>
-            <option>Roofing</option>
             <option>Gardening / Landscaping</option>
             <option>Cleaning</option>
             <option>Handyman</option>
@@ -341,108 +701,75 @@
         </div>
         <textarea name="message" rows="3" placeholder="Briefly: how many enquiries do you miss per week? Which channels (calls, WhatsApp, forms)?"></textarea>
         <input type="text" name="company_website" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <button type="submit" class="home-btn home-btn-primary home-btn-block" id="leadSubmitBtn">Book my free audit</button>
-        <div class="home-form-msg" id="leadMsg" role="status" aria-live="polite"></div>
-        <div class="home-form-foot">No spam. No mailing list. One reply within a few hours during business hours.</div>
+        <button type="submit" class="btn btn-primary btn-block" id="leadSubmitBtn">Book my free audit</button>
+        <div class="form-msg" id="leadMsg" role="status" aria-live="polite"></div>
+        <div class="form-foot">No spam. No mailing list. One reply within a few hours during business hours.</div>
       </form>
     </div>
   </section>
 
-  <footer class="home-footer">
-    <div class="home-footer-row">
-      <span><strong>G7&nbsp;Systems</strong> · Dublin, Ireland</span>
-      <span>hello@g7systems.xyz</span>
-      <span>© 2026 · Built for Irish trades</span>
-    </div>
-  </footer>
-
 </main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="#top">G7<span class="dot"></span><small>Systems</small></a>
+    <span>Dublin, Ireland · hello@g7systems.xyz</span>
+    <span>© 2026 G7 Systems · Built for Irish trades</span>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script>
-// ---------- Scroll-reveal + number count-up ----------
+// ---------- Sticky nav ----------
+const nav = document.querySelector('header.nav');
+const onScroll = () => nav.classList.toggle('solid', window.scrollY > 40);
+onScroll();
+addEventListener('scroll', onScroll, { passive: true });
+
+// ---------- Count-up stats ----------
 (function () {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const countEls = document.querySelectorAll('.stat-num[data-count-to]');
+  if (reduce || !('IntersectionObserver' in window)) return; // keep static text
 
-  // Reveal targets: every meaningful block on the home page
-  const revealSelectors = [
-    '.home-section-head',
-    '.home-leak-list li',
-    '.home-step',
-    '.home-template',
-    '.home-sites-cta',
-    '.home-form-copy',
-    '.home-form',
-    '.home-stat',
-  ];
-  const revealEls = document.querySelectorAll(revealSelectors.join(','));
-  revealEls.forEach(el => el.classList.add('fade-in'));
-
-  if (reduce || !('IntersectionObserver' in window)) {
-    revealEls.forEach(el => el.classList.add('visible'));
-  } else {
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), Math.min(i, 4) * 70);
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(el => revealObserver.observe(el));
-  }
-
-  // Number count-up on stats
   function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
-
   function runCountUp(host) {
     const target = Number(host.dataset.countTo);
     const prefix = host.dataset.prefix || '';
-    const valEl  = host.querySelector('.home-stat-num-val');
+    const valEl = host.querySelector('.stat-num-val');
     if (!valEl || !Number.isFinite(target)) return;
-
     const duration = 1400;
     const start = performance.now();
-
     function frame(now) {
       const t = Math.min(1, (now - start) / duration);
-      const v = Math.round(easeOutQuart(t) * target);
-      valEl.textContent = prefix + v;
+      valEl.textContent = prefix + Math.round(easeOutQuart(t) * target);
       if (t < 1) requestAnimationFrame(frame);
       else valEl.textContent = prefix + target;
     }
     requestAnimationFrame(frame);
   }
 
-  const countEls = document.querySelectorAll('.home-stat-num[data-count-to]');
-  if (reduce || !('IntersectionObserver' in window)) {
-    // Leave the static fallback text as-is
-  } else {
-    // Reset to 0 before observing (so we see the animation)
-    countEls.forEach(el => {
-      const prefix = el.dataset.prefix || '';
-      const val = el.querySelector('.home-stat-num-val');
-      if (val) val.textContent = prefix + '0';
+  countEls.forEach(el => {
+    const prefix = el.dataset.prefix || '';
+    const val = el.querySelector('.stat-num-val');
+    if (val) val.textContent = prefix + '0';
+  });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { runCountUp(entry.target); obs.unobserve(entry.target); }
     });
-    const countObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          runCountUp(entry.target);
-          countObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    countEls.forEach(el => countObserver.observe(el));
-  }
+  }, { threshold: 0.5 });
+  countEls.forEach(el => obs.observe(el));
 })();
 
+// ---------- Lead form → Supabase ----------
 document.getElementById('leadForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
   const btn  = document.getElementById('leadSubmitBtn');
   const msg  = document.getElementById('leadMsg');
-  msg.className = 'home-form-msg';
+  msg.className = 'form-msg';
 
   const data = Object.fromEntries(new FormData(form).entries());
   if (data.company_website) { msg.textContent = 'Thanks.'; return; } // honeypot
