@@ -1,0 +1,178 @@
+{
+  "id": "whatsapp-lead-intake-auto-reply",
+  "name": "WhatsApp AI Lead Intake + Auto Reply",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-lead-intake",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "d16ace2d-4bad-4a8e-8348-f7b74357052c",
+      "name": "Twilio WhatsApp Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-820, 0],
+      "webhookId": "whatsapp-lead-intake"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const body = $json.body ?? $json;\nconst fromRaw = String(body.From ?? body.phone ?? '').trim();\nconst phone = fromRaw.replace(/^whatsapp:/i, '');\nconst message = String(body.Body ?? body.message ?? '').trim();\nconst profileName = String(body.ProfileName ?? body.name ?? '').trim();\nconst messageSid = String(body.MessageSid ?? body.message_sid ?? `WA_${Date.now()}`);\nif (!phone) throw new Error('WhatsApp sender phone is missing');\nif (!message && Number(body.NumMedia ?? 0) === 0) throw new Error('WhatsApp message body is missing');\nreturn { json: {\n  phone,\n  message: message || 'Customer sent a WhatsApp media attachment.',\n  profile_name: profileName,\n  message_sid: messageSid,\n  dry_run: body.dry_run === true || String(body.dry_run ?? '').toLowerCase() === 'true'\n} };"
+      },
+      "id": "576c3e16-ff87-42a8-b7e0-d2cb565ae36e",
+      "name": "Normalize WhatsApp Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-600, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8766/analyze",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "phone", "value": "={{$json.phone}}" },
+            { "name": "message", "value": "={{$json.message}}" },
+            { "name": "profile_name", "value": "={{$json.profile_name}}" },
+            { "name": "message_sid", "value": "={{$json.message_sid}}" }
+          ]
+        },
+        "options": { "timeout": 120000 }
+      },
+      "id": "972d5464-e45a-4e7e-a03b-1cd95af77e2d",
+      "name": "AI Analyse Full Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-380, 0]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "javaScript",
+        "jsCode": "const ai = $json;\nconst inbound = $node['Normalize WhatsApp Message'].json;\nconst lead = ai.lead ?? {};\nconst xmlEscape = (value) => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\\\"/g, '&quot;').replace(/'/g, '&apos;');\nconst details = [\n  `Issue: ${lead.issue_description || lead.service_requested || 'WhatsApp enquiry'}`,\n  `Location: ${lead.location || lead.postcode || 'Not supplied'}`,\n  `Urgency: ${lead.urgency || 'normal'}`,\n  `Preferred timing: ${[lead.preferred_date, lead.preferred_time, lead.timing_notes].filter(Boolean).join(' ') || 'Not supplied'}`,\n  `Budget/price: ${lead.budget_text || lead.price_value || lead.price_preference || 'Not supplied'}`,\n  `Property: ${lead.property_type || 'Not supplied'}`,\n  `Access notes: ${lead.access_notes || 'None supplied'}`,\n  `AI summary: ${ai.summary || ''}`\n].join('\\n');\nreturn { json: {\n  phone: inbound.phone,\n  message_sid: inbound.message_sid,\n  dry_run: inbound.dry_run,\n  reply: ai.reply,\n  twiml: `<?xml version=\"1.0\" encoding=\"UTF-8\"?><Response><Message>${xmlEscape(ai.reply)}</Message></Response>`,\n  should_submit: Boolean(ai.should_submit && !inbound.dry_run && !ai.duplicate),\n  lead_name: lead.name || inbound.profile_name || inbound.phone,\n  business_name: `WhatsApp Lead - ${lead.name || inbound.profile_name || inbound.phone}`,\n  email: lead.email || null,\n  service_requested: lead.service_requested || 'WhatsApp enquiry',\n  urgency: lead.urgency || 'normal',\n  preferred_date: lead.preferred_date || null,\n  preferred_time: lead.preferred_time || null,\n  structured_message: details,\n  source_channel: 'whatsapp',\n  assigned_to: 'ops',\n  alert_destination: $vars.g7TelegramTarget ?? 'CONFIGURE_IN_N8N',\n  ai_summary: ai.summary || 'WhatsApp AI intake',\n  missing_required: ai.missing_required || [],\n  lead_complete: Boolean(ai.lead_complete),\n  confirmed: Boolean(ai.confirmed)\n} };"
+      },
+      "id": "fd890b86-e334-4f7b-b132-70b85ee87777",
+      "name": "Build AI Reply + Lead Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-160, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "d1bcbd5f-9c82-49b1-9545-4d592f047a3b",
+              "leftValue": "={{ $json.should_submit }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "8cf46558-1806-43bd-a3ad-02d6391af792",
+      "name": "Lead Confirmed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [60, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:5678/webhook/agency-lead-intake",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "name", "value": "={{$json.lead_name}}" },
+            { "name": "business_name", "value": "={{$json.business_name}}" },
+            { "name": "email", "value": "={{$json.email}}" },
+            { "name": "phone", "value": "={{$json.phone}}" },
+            { "name": "service_requested", "value": "={{$json.service_requested}}" },
+            { "name": "message", "value": "={{$json.structured_message}}" },
+            { "name": "source_channel", "value": "whatsapp" },
+            { "name": "urgency", "value": "={{$json.urgency}}" },
+            { "name": "assigned_to", "value": "={{$json.assigned_to}}" },
+            { "name": "alert_destination", "value": "={{$json.alert_destination}}" },
+            { "name": "niche", "value": "Home Services" },
+            { "name": "booking_date", "value": "={{$json.preferred_date}}" },
+            { "name": "booking_time", "value": "={{$json.preferred_time}}" },
+            { "name": "run_id", "value": "={{'twilio_' + $json.message_sid}}" },
+            { "name": "twilio_message_sid", "value": "={{$json.message_sid}}" }
+          ]
+        },
+        "options": { "timeout": 20000 }
+      },
+      "id": "76cb25ce-64b7-4809-a060-54fe4a860f5f",
+      "name": "Create Confirmed G7CRM Lead",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [300, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8766/mark-submitted",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "phone", "value": "={{$node['Build AI Reply + Lead Payload'].json.phone}}" }
+          ]
+        },
+        "options": { "timeout": 10000 }
+      },
+      "id": "1e557c35-93c9-4437-ad94-1de73c5040d2",
+      "name": "Mark Conversation Submitted",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, -100]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{$node['Build AI Reply + Lead Payload'].json.twiml}}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": { "entries": [{ "name": "Content-Type", "value": "text/xml; charset=utf-8" }] }
+        }
+      },
+      "id": "4da92438-08c8-40ad-8494-f6e8eed38694",
+      "name": "Reply to WhatsApp",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [760, 0]
+    }
+  ],
+  "connections": {
+    "Twilio WhatsApp Webhook": { "main": [[{ "node": "Normalize WhatsApp Message", "type": "main", "index": 0 }]] },
+    "Normalize WhatsApp Message": { "main": [[{ "node": "AI Analyse Full Chat", "type": "main", "index": 0 }]] },
+    "AI Analyse Full Chat": { "main": [[{ "node": "Build AI Reply + Lead Payload", "type": "main", "index": 0 }]] },
+    "Build AI Reply + Lead Payload": { "main": [[{ "node": "Lead Confirmed?", "type": "main", "index": 0 }]] },
+    "Lead Confirmed?": {
+      "main": [
+        [{ "node": "Create Confirmed G7CRM Lead", "type": "main", "index": 0 }],
+        [{ "node": "Reply to WhatsApp", "type": "main", "index": 0 }]
+      ]
+    },
+    "Create Confirmed G7CRM Lead": { "main": [[{ "node": "Mark Conversation Submitted", "type": "main", "index": 0 }]] },
+    "Mark Conversation Submitted": { "main": [[{ "node": "Reply to WhatsApp", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "versionId": "fe89a078-32ac-459a-ad8c-f1f9463b8faf",
+  "meta": { "templateCredsSetupCompleted": true },
+  "tags": []
+}
