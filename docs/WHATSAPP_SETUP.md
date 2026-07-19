@@ -88,6 +88,28 @@ Method: `HTTP POST`.
    - `automation_runs` has a `whatsapp-webhook` row.
 4. Send "URGENT no heat" and confirm the task comes in as `priority='urgent'` and the customer is `lead_temperature='hot'`.
 
+## Multi-client routing (how we scale this)
+
+Secrets are set **once per Twilio account**, not per client. Every WhatsApp
+sender in the account points at this same webhook; the function routes by the
+**receiving number** (`To`):
+
+1. It looks up `customers` where `record_type='client'` and `whatsapp` equals
+   the To number → that's the `client_id`.
+2. The lead, interactions and follow-up task are tagged with that `client_id`
+   (→ weekly reports count them automatically).
+3. The auto-reply is sent **from the same number the lead messaged**
+   (`From = To`); `TWILIO_WHATSAPP_FROM` is only a fallback.
+
+**Onboarding a client = two steps, no deploys:**
+1. Register their number as a Twilio WhatsApp Sender (Meta approval, takes days — start early).
+2. Put that number in the `whatsapp` field of their client card in the CRM.
+
+> ⚠️ Registering a number as a WhatsApp Business API sender disconnects it
+> from the normal WhatsApp app on the owner's phone. Default to a **dedicated
+> new number** for the automation ("your enquiry line") and leave the
+> client's personal WhatsApp untouched.
+
 ## Notes / decisions
 
 - **Auto-reply is a canned instant acknowledgment**, not an AI conversation — matches how the rest of G7 Systems is positioned ("we run it, client logs into nothing"; missed-call text-back is instant + templated, real follow-up is human). If you want an LLM-drafted contextual reply instead of the static template, that's a small change (call Claude/Anthropic API with the message body before the Twilio send) — say the word and I'll wire it in.

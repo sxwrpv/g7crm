@@ -53,8 +53,26 @@ Deno.serve(async (req: Request) => {
 
   const fromNumber = normalizePhone(fromRaw);
   if (!fromNumber) return jsonResponse({ error: "missing From" }, 400);
+  const toNumber = normalizePhone(toRaw);
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
+
+  // 0a. Multi-client routing — which client's line was messaged?
+  // Every Twilio WhatsApp sender points at this one webhook; the receiving
+  // number (To) identifies the client. Onboarding a client = register their
+  // number as a Twilio sender + put it in the `whatsapp` field of their
+  // customers card (record_type='client'). No per-client secrets needed.
+  let clientId: string | null = null;
+  if (toNumber) {
+    const { data: clientRow } = await supabase
+      .from("customers")
+      .select("id")
+      .eq("record_type", "client")
+      .eq("whatsapp", toNumber)
+      .limit(1)
+      .maybeSingle();
+    clientId = clientRow?.id ?? null;
+  }
 
   // 0. Idempotency — Twilio retries the webhook on timeouts/5xx. If we've
   //    already logged this MessageSid, ack and stop (no duplicate task/reply).
@@ -113,6 +131,23 @@ Deno.serve(async (req: Request) => {
       .select().single();
     if (custErr) console.error("customer insert failed", custErr);
     customerId = created?.id ?? null;
+
+    // First contact = an enquiry: log a lead_submissions row so weekly
+    // client reports count WhatsApp leads alongside website-form leads.
+    if (customerId) {
+      await supabase.from("lead_submissions").insert({
+        customer_id: customerId,
+        client_id: clientId,
+        source_channel: "whatsapp",
+        lead_name: profileName,
+        lead_phone: fromNumber,
+        service_requested: "WhatsApp enquiry",
+        urgency: isUrgent ? "high" : "normal",
+        message: body,
+        submission_status: "processed",
+        processed_at: new Date().toISOString(),
+      });
+    }
   }
 
   // interactions.customer_id is NOT NULL — without a customer row there is
@@ -131,6 +166,7 @@ Deno.serve(async (req: Request) => {
   // 2. Log the inbound message as an interaction ------------------------------
   await supabase.from("interactions").insert({
     customer_id: customerId,
+    client_id: clientId,
     type: "whatsapp",
     direction: "inbound",
     subject: `WhatsApp message from ${profileName || fromNumber}`,
@@ -162,6 +198,7 @@ Deno.serve(async (req: Request) => {
     } else {
       const { data: task } = await supabase.from("tasks").insert({
         customer_id: customerId,
+        client_id: clientId,
         title: `WhatsApp: ${profileName || fromNumber}`,
         description: body,
         status: "pending",
@@ -174,10 +211,13 @@ Deno.serve(async (req: Request) => {
   }
 
   // 4. Auto-reply back on WhatsApp ---------------------------------------------
+  // Reply from the number the lead actually messaged (To) so each client's
+  // line answers as itself; TWILIO_WHATSAPP_FROM is only the fallback.
+  const replyFrom = toRaw || TWILIO_FROM;
   const replyText = AUTO_REPLY_TMPL.replace("{name}", profileName ? ` ${profileName}` : "");
   let replyStatus = "skipped (no Twilio credentials)";
 
-  if (TWILIO_SID && TWILIO_TOKEN && TWILIO_FROM) {
+  if (TWILIO_SID && TWILIO_TOKEN && replyFrom) {
     const res = await fetch(
       `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`,
       {
@@ -187,7 +227,7 @@ Deno.serve(async (req: Request) => {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          From: TWILIO_FROM,
+          From: replyFrom,
           To: `whatsapp:${fromNumber}`,
           Body: replyText,
         }),
@@ -198,12 +238,13 @@ Deno.serve(async (req: Request) => {
 
     await supabase.from("interactions").insert({
       customer_id: customerId,
+      client_id: clientId,
       type: "whatsapp",
       direction: "outbound",
       subject: "Auto-reply sent",
       notes: replyText,
       created_by: "whatsapp-webhook",
-      metadata: { status: replyStatus },
+      metadata: { status: replyStatus, from: replyFrom },
     });
   }
 
@@ -214,7 +255,7 @@ Deno.serve(async (req: Request) => {
     workflow_run_id: messageSid || `wfn_${Date.now()}`,
     run_status: replyStatus === "sent" || replyStatus.startsWith("skipped") ? "success" : "warning",
     summary: `Inbound WhatsApp from ${profileName || fromNumber}${isUrgent ? " (urgent)" : ""}`,
-    payload: { from: fromNumber, body, urgent: isUrgent, task_id: taskId, reply_status: replyStatus, dashboard: DASHBOARD_URL },
+    payload: { from: fromNumber, to: toNumber, client_id: clientId, body, urgent: isUrgent, task_id: taskId, reply_status: replyStatus, dashboard: DASHBOARD_URL },
   });
 
   return twimlOk();

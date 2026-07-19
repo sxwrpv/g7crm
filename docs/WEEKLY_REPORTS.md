@@ -31,9 +31,11 @@ supabase secrets set REPORTS_ENABLED=true --project-ref fbstesgbttojfysznddq
 - `client_id = NULL` → G7's own pipeline (your sales funnel).
 - `client_id = <customer id of a client>` → that client's delivery traffic.
 
-`intake-processor` / `whatsapp-webhook` don't set it yet — when client #1
-goes live, map their inbound (e.g. by the Twilio `To` number) to their
-`client_id`. Until then reports simply show zero clients.
+`whatsapp-webhook` sets it automatically: it matches the Twilio `To` number
+against the `whatsapp` field of client cards (`record_type='client'`) — see
+`WHATSAPP_SETUP.md` → "Multi-client routing". `intake-processor` (website
+form) still leaves it NULL, which is correct while the form is G7's own;
+per-client web forms can pass a client marker later.
 
 ## Hardening
 
