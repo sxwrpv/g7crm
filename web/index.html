@@ -41,6 +41,10 @@
     --r-lg:26px;
     --maxw:1240px;
     --pad:clamp(20px,5vw,72px);
+    /* Leading pad for full-bleed scroll tracks: matches the centred .wrap
+       container's left edge on viewports wider than --maxw, so the first
+       card lines up with the section heading. */
+    --steps-pad:max(var(--pad), calc((100vw - var(--maxw)) / 2 + var(--pad)));
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth;scroll-padding-top:84px}
@@ -159,10 +163,10 @@
   .how .wrap>.sec-head{margin-bottom:22px}
   .scroll-hint{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:13.5px;font-weight:500;padding:0 var(--pad) 4px;max-width:var(--maxw);margin:0 auto}
   .scroll-hint .ln{flex:1;height:1px;background:var(--line)}
-  .steps-viewport{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .steps-viewport{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:var(--steps-pad);-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
   .steps-viewport::-webkit-scrollbar{height:6px}
   .steps-viewport::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
-  .steps-track{display:flex;gap:24px;padding:6px var(--pad) 22px}
+  .steps-track{display:flex;gap:24px;padding:6px var(--steps-pad) 22px}
   .step-panel{scroll-snap-align:start;flex:0 0 auto;width:min(80vw,360px);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:40px;min-height:320px;display:flex;flex-direction:column;justify-content:space-between}
   @media(min-width:769px){.step-panel{width:42vw;max-width:430px}}
   .step-num{font-family:"Clash Display";font-weight:600;font-size:15px;color:var(--accent);letter-spacing:0.05em}
