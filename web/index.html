@@ -705,6 +705,7 @@
         </div>
         <textarea name="message" rows="3" placeholder="Briefly: how many enquiries do you miss per week? Which channels (calls, WhatsApp, forms)?"></textarea>
         <input type="text" name="company_website" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div id="turnstileWidget" style="margin:4px 0 12px"></div>
         <button type="submit" class="btn btn-primary btn-block" id="leadSubmitBtn">Book my free audit</button>
         <div class="form-msg" id="leadMsg" role="status" aria-live="polite"></div>
         <div class="form-foot">No spam. No mailing list. One reply within a few hours during business hours.</div>
@@ -724,6 +725,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=renderTurnstile&amp;render=explicit" defer></script>
 <script>
 // ---------- Sticky nav ----------
 const nav = document.querySelector('header.nav');
@@ -767,7 +769,17 @@ addEventListener('scroll', onScroll, { passive: true });
   countEls.forEach(el => obs.observe(el));
 })();
 
-// ---------- Lead form → Supabase ----------
+// ---------- Protected lead form → Supabase Edge Function ----------
+let turnstileWidgetId = null;
+window.renderTurnstile = function () {
+  if (!APP_CONFIG.turnstileSiteKey || !window.turnstile || turnstileWidgetId !== null) return;
+  turnstileWidgetId = window.turnstile.render('#turnstileWidget', {
+    sitekey: APP_CONFIG.turnstileSiteKey,
+    theme: 'light',
+    action: 'lead-submit',
+  });
+};
+
 document.getElementById('leadForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
@@ -776,7 +788,6 @@ document.getElementById('leadForm').addEventListener('submit', async (e) => {
   msg.className = 'form-msg';
 
   const data = Object.fromEntries(new FormData(form).entries());
-  if (data.company_website) { msg.textContent = 'Thanks.'; return; } // honeypot
 
   btn.disabled = true;
   msg.textContent = 'Sending…';
@@ -789,28 +800,27 @@ document.getElementById('leadForm').addEventListener('submit', async (e) => {
     service_requested: data.service_requested || 'General enquiry',
     urgency: data.urgency || 'normal',
     message: data.message || '',
-    source_channel: 'website-form',
-    submission_status: 'new',
-    inquiry_type: data.urgency === 'emergency' ? 'urgent-call' : 'standard',
-    raw_payload: data,
+    company_website: data.company_website || '',
   };
 
   try {
-    if (APP_CONFIG.n8nLeadWebhookUrl) {
-      const res = await fetch(APP_CONFIG.n8nLeadWebhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error('Webhook ' + res.status);
-    } else {
-      const { error } = await db.from('lead_submissions').insert(payload);
-      if (error) throw error;
+    if (!APP_CONFIG.turnstileSiteKey || turnstileWidgetId === null || !window.turnstile) {
+      throw new Error('Lead form bot protection is not configured');
     }
+    const turnstileToken = window.turnstile.getResponse(turnstileWidgetId);
+    if (!turnstileToken) throw new Error('Complete the bot verification');
+
+    const { data: result, error } = await db.functions.invoke('submit-lead', {
+      body: { ...payload, turnstile_token: turnstileToken },
+    });
+    if (error || !result?.ok) throw error || new Error('Lead submission failed');
+
     form.reset();
+    window.turnstile.reset(turnstileWidgetId);
     msg.classList.add('ok');
     msg.textContent = "Got it. We'll be in touch within a few hours.";
   } catch (err) {
+    if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
     msg.classList.add('err');
     msg.textContent = 'Could not send. Try again or email hello@g7systems.xyz.';
     console.error(err);

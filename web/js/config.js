@@ -5,9 +5,8 @@ const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const APP_CONFIG = {
-  // Set this to your hosted n8n webhook URL after Railway deploy.
-  // While empty, the public lead form posts straight to Supabase lead_submissions.
-  n8nLeadWebhookUrl: '',
+  // Public Cloudflare Turnstile site key. This is intentionally browser-visible.
+  turnstileSiteKey: '',
   defaultNiche: 'Home Services',
   // Emails allowed to sign into the dashboard. Add more as needed.
   allowedOperators: ['hello@g7systems.xyz'],

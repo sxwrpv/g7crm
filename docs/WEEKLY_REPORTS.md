@@ -39,12 +39,14 @@ per-client web forms can pass a client marker later.
 
 ## Hardening
 
-The cron job sends an `x-g7-secret` header (value inside the migration SQL).
-Enforce it so randoms can't trigger runs:
+Request authorization is mandatory. The Edge Function reads `REPORT_SECRET`
+from Function Secrets, while the cron job reads the matching value from
+Supabase Vault under the name `g7_weekly_report_secret`. No credential belongs
+in a migration or tracked file.
 
-```bash
-supabase secrets set REPORT_SECRET=<value from the migration> --project-ref fbstesgbttojfysznddq
-```
+Follow `SECURITY_DEPLOYMENT.md` to configure both copies and deploy the
+corrective migration. If either side is missing or mismatched, reports fail
+closed rather than running unauthenticated.
 
 ## Change the schedule
 

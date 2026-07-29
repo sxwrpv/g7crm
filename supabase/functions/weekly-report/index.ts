@@ -2,7 +2,7 @@
 // Supabase Edge Function: weekly-report
 //
 // Triggered every Monday 08:00 UTC by pg_cron (see
-// supabase/migrations/20260717_weekly_client_reports.sql).
+// supabase/migrations/20260729_security_foundations.sql).
 //
 // What it sends:
 //   - One report email per live client (customers.record_type='client' AND
@@ -18,11 +18,12 @@
 // Env (Supabase Dashboard → Edge Functions → Secrets):
 //   RESEND_API_KEY, ALERT_EMAIL_TO, ALERT_EMAIL_FROM  — same as intake-processor
 //   REPORTS_ENABLED — "true" to actually email clients (default: dry-run)
-//   REPORT_SECRET   — if set, requests must carry x-g7-secret matching it
+//   REPORT_SECRET   — required; requests must carry x-g7-secret matching it
 //   EST_JOB_VALUE   — € value used for the estimate line (default 400)
 
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { authorizeSharedSecret } from "../_shared/security.mjs";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -47,8 +48,9 @@ interface ClientStats {
 
 Deno.serve(async (req: Request) => {
   if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
-  if (SECRET && req.headers.get("x-g7-secret") !== SECRET) {
-    return jsonResponse({ error: "forbidden" }, 403);
+  const authorization = authorizeSharedSecret(SECRET, req.headers.get("x-g7-secret") ?? undefined);
+  if (!authorization.ok) {
+    return jsonResponse({ error: authorization.error }, authorization.status);
   }
 
   const supabase = createClient(SUPABASE_URL, SERVICE_ROLE);
