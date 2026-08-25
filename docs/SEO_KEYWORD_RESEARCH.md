@@ -2,7 +2,7 @@
 
 ## Method and limits
 
-This is qualitative positioning research for the current one-page site. It intentionally includes no search-volume, traffic or ranking estimates because no verified keyword-platform data was supplied. Themes should be validated later with Search Console and a reputable keyword tool before prioritising new pages.
+This is qualitative positioning research for the current public site. It intentionally includes no search-volume, traffic or ranking estimates because no verified keyword-platform data was supplied. Themes should be validated later with Search Console and a reputable keyword tool before prioritising new pages.
 
 ## Primary theme
 
@@ -50,11 +50,11 @@ This is qualitative positioning research for the current one-page site. It inten
 - Intent: retention and repeat-work workflow.
 - Current-page mapping: Grow stage, customer email follow-up foundation and Growth package. Messaging should continue to avoid implying unrestricted marketing permission.
 
-### One-page trade websites
+### Custom websites for trade businesses
 
-- Example queries: `one page website for trades`, `plumber website design Ireland`, `electrician website Ireland`, `trade website design Dublin`.
+- Example queries: `website design for trades`, `plumber website design Ireland`, `electrician website Ireland`, `trade website design Dublin`.
 - Intent: service comparison and portfolio evaluation.
-- Current-page mapping: focused one-page website foundation and clearly labelled fictional concept examples.
+- Current-page mapping: custom business website foundation and clearly labelled fictional design examples.
 
 ## Search-intent coverage on the current page
 

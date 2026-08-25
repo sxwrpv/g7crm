@@ -42,7 +42,7 @@ Have these in your head when you pick up the phone. Don't put them on the public
 | Tier | What's in it | Setup time | Monthly | Best for |
 |---|---|---|---|---|
 | **Starter** | Lead form on their existing site + SMS/email alert within 5 min + G7CRM view | 1-2 hours | **€290/mo** (first month free) | Trades that already have a site but it leaks |
-| **Standard** ⭐ | Starter + we build/rebuild their website (one of 3 template directions) | 7-14 days | **€490/mo** | Most clients — bundled offer |
+| **Standard** ⭐ | Starter + a custom website built/rebuilt to the agreed requirements | Agreed after audit | **€490/mo** | Most clients — bundled offer |
 | **Growth** | Standard + Google Ads management + Google Business Profile + monthly review call | 14-21 days | **€890/mo** | Clients who want active growth, not just lead-stopping |
 
 All tiers: no contract · cancel anytime · first month free.
@@ -63,7 +63,7 @@ Run this checklist for every new client. Order matters.
 5. **End-to-end test** — call their forwarded number, miss it, confirm SMS text-back goes to a real test number you control. Log in `automation_runs`.
 
 ### Add for Standard / Growth
-6. **Build website** — clone Classic / Modern / Local Pride direction, swap in business name, services, photos, area covered. Deploy to Vercel under `clientname.g7systems.app` first, then their domain once they're happy.
+6. **Build website** — agree the required pages, content, services, customer journey and integrations; then design and build the website around that scope. Deploy to Vercel under `clientname.g7systems.app` first, then their domain once they're happy.
 7. **Embed the form** — form posts to your Supabase with a `client_id` so leads route to *their* pipeline.
 
 ### Add for Growth
