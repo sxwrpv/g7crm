@@ -34,14 +34,19 @@ test('setup foundations include all requested services', () => {
     'Missed-call &amp; auto-reply setup',
     'Google review system',
     'Customer email follow-up',
-    'Focused one-page websites',
+    'Custom business websites',
   ]) assert.match(landing, new RegExp(service, 'i'));
 });
 
 test('package scopes match the requested managed-service tiers', () => {
   assert.match(landing, /Starter<small>Lead capture \+ auto-reply \+ G7CRM<\/small>/);
-  assert.match(landing, /Standard<small>Starter \+ WhatsApp \+ one-page website<\/small>/);
+  assert.match(landing, /Standard<small>Starter \+ WhatsApp \+ custom website<\/small>/);
   assert.match(landing, /Growth<small>Standard \+ GBP, reviews, email follow-up &amp; Google Ads<\/small>/);
+});
+
+test('website offer is custom and not limited to a one-page build', () => {
+  assert.doesNotMatch(landing, /one-page website/i);
+  assert.match(landing, /built to your requirements/i);
 });
 
 test('pricing is exact and setup fee is individually quoted without an amount', () => {
